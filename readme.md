@@ -1,30 +1,16 @@
-Snake Console Ports
-===================
+Snake Turbografx Console Port
+=============================
 By Scott Harner
-August 11, 2026
+October 21, 2026
 
 > **Note:** This is a fork of [rondorkerin/Snake](https://github.com/rondorkerin/Snake). 
-> - Added Sega Saturn platform support (Snake SS).
-> - Added title screen.
-> - Added game over screen.
-> - Added game win screen.
-> - Added sound effects.
-> - Added Sega Genesis platform support (Mega Snake).
-> - Added pause feature.
-> - Added background music.
-> - Added high score.
+> - Added Turbografx platform support (Turbo Snake).
 
-![Snake SS Title](documentation/screenshots/snake-ss-title.png)
-*Snake SS Title*
+![Turbo Snake Title](documentation/screenshots/turbo-snake-title.png)
+*Turbo Snake Title*
 
-![Snake SS Gameplay](documentation/screenshots/snake-ss-game.png)
-*Snake SS Gameplay*
-
-![Mega Snake Title](documentation/screenshots/mega-snake-title.png)
-*Mega Snake Title*
-
-![Mega Snake Gameplay](documentation/screenshots/mega-snake-game.png)
-*Mega Snake Gameplay*
+![Turbo Snake Gameplay](documentation/screenshots/turbo-snake-game.png)
+*Turbo Snake Gameplay*
 
 Snake!
 ======

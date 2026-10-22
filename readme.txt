@@ -1,21 +1,13 @@
 #####################################################
 
-Snake Console Ports
+Snake Turbografx Console Port
 By Scott Harner
-August 11, 2026
+October 21, 2026
 
 ######################################################
 
 **Note:** This is a fork of rondorkerin/Snake (https://github.com/rondorkerin/Snake). 
-Added Sega Saturn platform support (Snake SS).
-Added title screen.
-Added game over screen.
-Added game win screen.
-Added sound effects.
-Added Sega Genesis platform support (Mega Snake).
-Added pause feature.
-Added background music.
-Added high score.
+Added Turbografx platform support (Turbo Snake).
 
 #####################################################
 
