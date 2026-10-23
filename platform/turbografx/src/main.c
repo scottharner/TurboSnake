@@ -15,10 +15,10 @@
 // #define BORDER_ZINDEX 500
 // #define JO_GRID_WIDTH (JO_TV_WIDTH / 8)
 // #define JO_GRID_HEIGHT (JO_TV_HEIGHT / 8)
-// #define MAP_HEIGHT 30
-// #define HALF_MAP_WIDTH 20
-// #define MAP_WIDTH 40
-// #define TILE_SIZE 8
+#define MAP_HEIGHT 28
+#define HALF_MAP_WIDTH 16
+#define MAP_WIDTH 32
+#define TILE_SIZE 8
 // #define TITLE_TRACKID 3
 // #define GAME_TRACKID 2
 // #define COPYRIGHT_INDEX 64
@@ -35,9 +35,14 @@
 // static short pickup_sound_id;
 // static short lose_sound_id;
 
-// // Saturn implementation of platform initialization
-// void platform_initialize()
-// {
+// Saturn implementation of platform initialization
+void platform_initialize()
+{
+    set_color_rgb(1, 7, 7, 7); // first color index is white
+	set_font_color(1, 0);
+	set_font_pal(0);
+	load_default_font();
+
 //     jo_core_init(JO_COLOR_Black);
 //     load_drv(ADX_MASTER_2304);
 //     snake_sprite_id = jo_sprite_add_tga("TEX", "SNAKE.TGA", JO_COLOR_Transparent);
@@ -52,7 +57,7 @@
 //     pickup_sound_id = load_8bit_pcm((Sint8 *)"PICKUP.PCM", 15360); // using ponetone due to issues with jo engine audio
 //     lose_sound_id = load_8bit_pcm((Sint8 *)"LOSE.PCM", 15360);
 //     CDDA_SetVolume(4);
-// }
+}
 
 // void draw_tile(int x, int y, int sprite_id, int z, int angle)
 // {
@@ -94,9 +99,23 @@ void platform_play_sound(sound_type current_sound_type)
 //     jo_printf_with_color(x, y, color, string);
 // }
 
-// // display a game over screen
-// void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type current_loss_type)
-// {
+static int get_centered_x_coord(char * text)
+{
+    int length;
+
+    length = 0;
+    while (text[length] != '\0')
+    {
+        length++;
+    }
+
+    return (MAX_MAP_WIDTH - length ) / 2;
+}
+
+// display a game over screen
+void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type current_loss_type)
+{
+    // todo - implement
 //     if (did_mode_change)
 //     {
 //         CDDA_Stop(); // stop game music
@@ -111,11 +130,12 @@ void platform_play_sound(sound_type current_sound_type)
 //     char reason_string[25];
 //     sprintf(reason_string, "Reason: %s", current_loss_type == LOSS_TYPE_SELF ? "Self Collision" : "Wall Collision");
 //     print_centered_text(12, reason_string, JO_COLOR_INDEX_White);
-// }
+}
 
-// // display a win screen
-// void platform_draw_win_screen(int score, bool did_mode_change)
-// {
+// display a win screen
+void platform_draw_win_screen(int score, bool did_mode_change)
+{
+    // todo - implement
 //     if (did_mode_change)
 //     {
 //         CDDA_Stop(); // stop game music
@@ -127,11 +147,12 @@ void platform_play_sound(sound_type current_sound_type)
 //     char score_string[12];
 //     sprintf(score_string, "Score: %d", score);
 //     print_centered_text(10, score_string, JO_COLOR_INDEX_White);
-// }
+}
 
-// // display a credits screen
-// void platform_draw_credits_screen(bool did_mode_change)
-// {
+// display a credits screen
+void platform_draw_credits_screen(bool did_mode_change)
+{
+    // todo - implement
 //     if (did_mode_change)
 //     {
 //         CDDA_Stop(); // stop game music
@@ -150,7 +171,7 @@ void platform_play_sound(sound_type current_sound_type)
 //     print_centered_text(21, "Advisor - Hassmaschine", JO_COLOR_INDEX_White);
 //     print_centered_text(23, "Advisor - supahfly", JO_COLOR_INDEX_White);
 //     print_centered_text(28, "Powered By - Jo Engine", JO_COLOR_INDEX_White);
-// }
+}
 
 // // calculate the color to display for a menu option
 // static int get_option_color(option selected_option, option display_option)
@@ -165,33 +186,34 @@ void platform_play_sound(sound_type current_sound_type)
 //     strcpy(buffer, source);
 // }
 
-// // display a title screen
-// void platform_draw_title_screen(bool did_mode_change, option title_option)
-// {
-//     if (did_mode_change)
-//     {
-//         jo_clear_screen();
-//         CDDA_PlaySingle(TITLE_TRACKID, true);
-//     }
+// display a title screen
+void platform_draw_title_screen(bool did_mode_change, option title_option)
+{
+    if (did_mode_change)
+    {
+        cls();
+        // CDDA_PlaySingle(TITLE_TRACKID, true);
+    }
 
-//     char speed_string[6];
-//     game_get_speed_string(speed_string);
+    // char speed_string[6];
+    // game_get_speed_string(speed_string);
 
-//     draw_tile(0, 0, title_sprite_id, BORDER_ZINDEX, 0);
+    // draw_tile(0, 0, title_sprite_id, BORDER_ZINDEX, 0);
 
-//     print_centered_text(12, "Start Game", get_option_color(title_option, OPTION_START));
-//     char speed_menu_string[20];
-//     sprintf(speed_menu_string, "Speed: < %-6s >", speed_string);
-//     print_centered_text(14, speed_menu_string, get_option_color(title_option, OPTION_SPEED));
-//     print_centered_text(16, "Credits", get_option_color(title_option, OPTION_CREDITS));
+    put_string("Start Game", get_centered_x_coord("Start Game"), 12);
+    // print_centered_text(12, "Start Game", get_option_color(title_option, OPTION_START));
+    // char speed_menu_string[20];
+    // sprintf(speed_menu_string, "Speed: < %-6s >", speed_string);
+    // print_centered_text(14, speed_menu_string, get_option_color(title_option, OPTION_SPEED));
+    // print_centered_text(16, "Credits", get_option_color(title_option, OPTION_CREDITS));
 
-//     char copyright = (char)COPYRIGHT_INDEX;
-//     char copyright_string[30];
-//     sprintf(copyright_string, "Game %c 2010 Stephen Bryant", copyright);
-//     print_centered_text(26, copyright_string, JO_COLOR_INDEX_White);
-//     sprintf(copyright_string, "Port %c 2026 Scott Harner", copyright);
-//     print_centered_text(28, copyright_string, JO_COLOR_INDEX_White);
-// }
+    // char copyright = (char)COPYRIGHT_INDEX;
+    // char copyright_string[30];
+    // sprintf(copyright_string, "Game %c 2010 Stephen Bryant", copyright);
+    // print_centered_text(26, copyright_string, JO_COLOR_INDEX_White);
+    // sprintf(copyright_string, "Port %c 2026 Scott Harner", copyright);
+    // print_centered_text(28, copyright_string, JO_COLOR_INDEX_White);
+}
 
 // platform specific setting of random generator seed
 void platform_set_random_seed(unsigned int seed)
@@ -220,11 +242,11 @@ int platform_get_random(int max)
 //     jo_free(pointer);
 // }
 
-// // steps to prepare to exit the game
-// void platform_shutdown()
-// {
-//     // we dont have any shutdown steps to perform on this platform
-// }
+// steps to prepare to exit the game
+void platform_shutdown()
+{
+    // we dont have any shutdown steps to perform on this platform
+}
 
 // // track all current and previous input states so we can check on input presses
 // static void update_input_states(bool current_input_states[INPUT_TYPE_COUNT])
@@ -277,17 +299,15 @@ input_type platform_get_input_type(mode game_mode, bool current_input_states[INP
     return current_input; // todo - implement
 }
 
-// void platform_update_platform_state()
-// {
-//     // we dont have any updates to make on this platform
-// }
+void platform_update_platform_state()
+{
+    // we dont have any updates to make on this platform
+}
 
 // perform platform specific actions when the game resets
 void platform_reset(struct game_config *config)
 {
-    // todo - implement
-    // // no actions to perform on this platform
-    // (void)config; // avoid compiler warnings
+    // no actions to perform on this platform
 }
 
 // static void draw_border(game_config *config)
@@ -339,8 +359,9 @@ void platform_reset(struct game_config *config)
 //     jo_sprite_disable_vertical_flip();
 // }
 
-// void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, game_config *config, int high_score)
-// {
+void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
+{
+    // todo - implement
 //     if (did_mode_change)
 //     {        
 //         CDDA_Stop(); // stop title
@@ -379,19 +400,23 @@ void platform_reset(struct game_config *config)
 //     jo_printf_with_color(3, 1, JO_COLOR_INDEX_White, "High Score: %d", high_score);
 
 //     draw_border(config);
-// }
+}
 
 main()
 {
-    // game_initialize(MAP_HEIGHT, MAP_WIDTH, TILE_SIZE);
+    game_initialize(MAP_HEIGHT, MAP_WIDTH, TILE_SIZE);
 	// jo_core_add_vblank_callback(sdrv_vblank_rq);
     // jo_core_add_callback(game_update);
     // jo_core_run();
-    set_color_rgb(1, 7, 7, 7);
-	set_font_color(1, 0);
-	set_font_pal(0);
-	load_default_font();
-	put_string("Hello, PCE World!", 8, 13);
+
+    while (true)
+    {
+        vsync();
+
+        game_update();        
+    }
+
+    game_shutdown();
 }
 
 /*
