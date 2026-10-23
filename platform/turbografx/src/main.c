@@ -67,18 +67,19 @@
 // #endif
 // }
 
-// // plays the requested sound effect
-// void platform_play_sound(sound_type current_sound_type)
-// {
-//     if (current_sound_type == SOUND_PICKUP)
-//     {
-//         pcm_play(pickup_sound_id, PCM_PROTECTED, 6);
-//     }
-//     else if (current_sound_type == SOUND_LOSE)
-//     {
-//         pcm_play(lose_sound_id, PCM_PROTECTED, 6);
-//     }
-// }
+// plays the requested sound effect
+void platform_play_sound(sound_type current_sound_type)
+{
+    // todo - implement
+    // if (current_sound_type == SOUND_PICKUP)
+    // {
+    //     pcm_play(pickup_sound_id, PCM_PROTECTED, 6);
+    // }
+    // else if (current_sound_type == SOUND_LOSE)
+    // {
+    //     pcm_play(lose_sound_id, PCM_PROTECTED, 6);
+    // }
+}
 
 // static void print_centered_text(int y, const char *string, int color)
 // {
@@ -192,18 +193,20 @@
 //     print_centered_text(28, copyright_string, JO_COLOR_INDEX_White);
 // }
 
-// // platform specific setting of random generator seed
-// void platform_set_random_seed(unsigned int seed)
-// {
-//     jo_random_seed = seed;
-// }
+// platform specific setting of random generator seed
+void platform_set_random_seed(unsigned int seed)
+{
+    // todo - implement
+    // jo_random_seed = seed;
+}
 
-// // platform specific random number generation
-// int platform_get_random(int max)
-// {
-//     if (max <= 0) return 0;
-//     return (jo_random(max)-1); // jo_random requires passing parm so we cant use modulo
-// }
+// platform specific random number generation
+int platform_get_random(int max)
+{
+    if (max <= 0) return 0;
+    return max; // todo - implement
+    //return (jo_random(max)-1); // jo_random requires passing parm so we cant use modulo
+}
 
 // // platform specific memory allocation
 // void * platform_memory_allocate(unsigned int size)
@@ -236,55 +239,56 @@
 //     current_input_states[INPUT_TYPE_START] = jo_is_pad1_key_pressed(JO_KEY_START);    
 // }
 
-// // retrieve the input type from the user
-// input_type platform_get_input_type(mode game_mode, bool current_input_states[INPUT_TYPE_COUNT])
-// {
-//     input_type current_input = INPUT_TYPE_NOTHING;
-//     if (jo_is_pad1_available())
-//     {
-//         update_input_states(current_input_states);
-//         switch(game_mode)
-//         {
-//             case MODE_GAME:
+// retrieve the input type from the user
+input_type platform_get_input_type(mode game_mode, bool current_input_states[INPUT_TYPE_COUNT])
+{
+    input_type current_input = INPUT_TYPE_NOTHING;
+    // if (jo_is_pad1_available())
+    // {
+    //     update_input_states(current_input_states);
+    //     switch(game_mode)
+    //     {
+    //         case MODE_GAME:
 
-//                 if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;
-//                 else if (jo_is_pad1_key_pressed(JO_KEY_LEFT)) current_input = INPUT_TYPE_LEFT;
-//                 else if (jo_is_pad1_key_pressed(JO_KEY_RIGHT)) current_input = INPUT_TYPE_RIGHT;
-//                 else if (jo_is_pad1_key_pressed(JO_KEY_DOWN)) current_input = INPUT_TYPE_DOWN;
-//                 else if (jo_is_pad1_key_pressed(JO_KEY_UP)) current_input = INPUT_TYPE_UP;
+    //             if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;
+    //             else if (jo_is_pad1_key_pressed(JO_KEY_LEFT)) current_input = INPUT_TYPE_LEFT;
+    //             else if (jo_is_pad1_key_pressed(JO_KEY_RIGHT)) current_input = INPUT_TYPE_RIGHT;
+    //             else if (jo_is_pad1_key_pressed(JO_KEY_DOWN)) current_input = INPUT_TYPE_DOWN;
+    //             else if (jo_is_pad1_key_pressed(JO_KEY_UP)) current_input = INPUT_TYPE_UP;
 
-//                 break;
+    //             break;
 
-//             default:
+    //         default:
 
-//                 if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;    
-//                 else if (game_input_pressed(INPUT_TYPE_DOWN)) current_input = INPUT_TYPE_DOWN;
-//                 else if (game_input_pressed(INPUT_TYPE_UP)) current_input = INPUT_TYPE_UP;
-//                 else if (game_input_pressed(INPUT_TYPE_LEFT)) current_input = INPUT_TYPE_LEFT;
-//                 else if (game_input_pressed(INPUT_TYPE_RIGHT)) current_input = INPUT_TYPE_RIGHT;
+    //             if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;    
+    //             else if (game_input_pressed(INPUT_TYPE_DOWN)) current_input = INPUT_TYPE_DOWN;
+    //             else if (game_input_pressed(INPUT_TYPE_UP)) current_input = INPUT_TYPE_UP;
+    //             else if (game_input_pressed(INPUT_TYPE_LEFT)) current_input = INPUT_TYPE_LEFT;
+    //             else if (game_input_pressed(INPUT_TYPE_RIGHT)) current_input = INPUT_TYPE_RIGHT;
 
-//                 break;
-//         }
-//     }
-//     else
-//     {
-//         game_reset_input_states();
-//     }
+    //             break;
+    //     }
+    // }
+    // else
+    // {
+    //     game_reset_input_states();
+    // }
 
-//     return current_input;
-// }
+    return current_input; // todo - implement
+}
 
 // void platform_update_platform_state()
 // {
 //     // we dont have any updates to make on this platform
 // }
 
-// // perform platform specific actions when the game resets
-// void platform_reset(game_config *config)
-// {
-//     // no actions to perform on this platform
-//     (void)config; // avoid compiler warnings
-// }
+// perform platform specific actions when the game resets
+void platform_reset(struct game_config *config)
+{
+    // todo - implement
+    // // no actions to perform on this platform
+    // (void)config; // avoid compiler warnings
+}
 
 // static void draw_border(game_config *config)
 // {

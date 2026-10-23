@@ -22,9 +22,9 @@ typedef enum
 
 struct snake_node
 {
-	int dir;
-	int x;
-	int y;
+	unsigned char dir;
+	unsigned char x;
+	unsigned char y;
 	struct snake_node *next;
 };
 
