@@ -1,6 +1,6 @@
-#include "../common/types.h"
-#include "game.h"
-#include "../platform/platform.h"
+#include "../../../common/types.h"
+#include "../../../game/game.h"
+#include "../../../platform/platform.h"
 
 /*
 *   Snake: Platform agnostic game logic.
@@ -60,7 +60,7 @@ static void set_object_map(int x, int y, object target_object)
 *  This function recursively moves the snake. It goes all the way to the last node of the snake, changes its coordinates,
 *  and then changes its coordinates, all the way up.
 */
-static snake_node* move_body(snake_node* current_node, int temp_x, int temp_y)
+static struct snake_node* move_body(struct snake_node* current_node, int temp_x, int temp_y)
 {
 	if (current_node->next == NULL) //we've reached the end of the snake's body
 	{
@@ -79,7 +79,8 @@ static snake_node* move_body(snake_node* current_node, int temp_x, int temp_y)
 static void title_screen_read_input()
 {
     //this contains the array of flags which tell which button has been pressed. It must be cleared before every input.
-    input_type current_input = platform_get_input_type(MODE_TITLE, current_input_states);
+    input_type current_input;
+    current_input = platform_get_input_type(MODE_TITLE, current_input_states);
     if (current_input == INPUT_TYPE_START)
     {
         if (title_option == OPTION_START)
@@ -172,7 +173,8 @@ static bool timeout_screen_read_input()
     bool did_trigger_timeout = false;
 
     //this contains the array of flags which tell which button has been pressed. It must be cleared before every input.
-    input_type current_input = platform_get_input_type(MODE_TITLE, current_input_states);
+    input_type current_input;
+    current_input = platform_get_input_type(MODE_TITLE, current_input_states);
     if (current_input == INPUT_TYPE_START)
     {
         did_trigger_timeout = true;
@@ -189,13 +191,21 @@ void set_high_score()
 
 static void move(input_type current_input)
 {
+    int temp_x;
+    int temp_y;
+    struct snake_node* temp;
+    int new_node_x;
+    int new_node_y;
+    struct snake_node* new_node;
+
     //this contains the array of flags which tell which button has been pressed. It must be cleared before every input.
     if (current_input == INPUT_TYPE_LEFT) player->dir = INPUT_TYPE_LEFT;
     if (current_input == INPUT_TYPE_RIGHT) player->dir = INPUT_TYPE_RIGHT;
     if (current_input == INPUT_TYPE_DOWN) player->dir = INPUT_TYPE_DOWN;
     if (current_input == INPUT_TYPE_UP) player->dir = INPUT_TYPE_UP;
 
-    int temp_x = player->x, temp_y = player->y;
+    temp_x = player->x;
+    temp_y = player->y;
 
     if (player->dir == INPUT_TYPE_LEFT)
     {
@@ -271,15 +281,15 @@ static void move(input_type current_input)
         set_high_score();
 
         platform_play_sound(SOUND_PICKUP);
-        snake_node* temp = player;
+        temp = player;
         while (temp->next != NULL) //the snake is essentially a linked list and we're traversing it
         {
             temp = temp->next;
         }
-        int new_node_x = temp->x; //when we reach the final node, we store its location with two variables
-        int new_node_y = temp->y;
+        new_node_x = temp->x; //when we reach the final node, we store its location with two variables
+        new_node_y = temp->y;
         player = move_body(player, temp_x,temp_y);
-        snake_node* new_node = platform_memory_allocate(sizeof(snake_node)); //after we move the whole body we make a new node line( screen, 130, 130, 150, 150, makecol( 255, 0, 0));
+        new_node = platform_memory_allocate(sizeof(struct snake_node)); //after we move the whole body we make a new node line( screen, 130, 130, 150, 150, makecol( 255, 0, 0));
         new_node->x = new_node_x;
         new_node->y = new_node_y; //we set this new node's location variables
         new_node->dir = temp->dir;
@@ -314,7 +324,8 @@ static void move(input_type current_input)
 
 void game_reset_input_states()
 {
-    for (int i = 0; i < INPUT_TYPE_COUNT; i++)
+    int i;
+    for (i = 0; i < INPUT_TYPE_COUNT; i++)
     {
         previous_input_states[i] = false;
         current_input_states[i] = false;
@@ -358,17 +369,20 @@ void game_get_speed_string(char* buffer)
 
 void game_update(void)
 {
+    bool did_mode_change;
+    input_type current_input;
+    bool did_trigger_timeout;
+
     action_cycles++;
     frame_counter++;
-    bool did_mode_change = false;
+    did_mode_change = false;
     if (previous_game_mode != game_mode)
     {
         did_mode_change = true;
     }
 
     previous_game_mode = game_mode;
-    input_type current_input;
-    bool did_trigger_timeout = false;
+    did_trigger_timeout = false;
 
     switch (game_mode)   
     {
@@ -442,9 +456,9 @@ void game_initialize(int map_height, int map_width, int tile_size)
 {
     platform_initialize();
     previous_game_mode = MODE_NONE;
-    player = platform_memory_allocate(sizeof(snake_node));
+    player = platform_memory_allocate(sizeof(struct snake_node));
     player->next = NULL;
-    config = platform_memory_allocate(sizeof(game_config));
+    config = platform_memory_allocate(sizeof(struct game_config));
     config->map_height = map_height;
     config->map_width = map_width;
     config->tile_size = tile_size;
@@ -468,11 +482,11 @@ void game_save_previous_inputstates()
 
 static void free_snake()
 {
-    snake_node *current = player->next;
+    struct snake_node *current = player->next;
 
     while (current != NULL)
     {
-        snake_node *next = current->next;
+        struct snake_node *next = current->next;
         platform_memory_free(current);
         current = next;
     }

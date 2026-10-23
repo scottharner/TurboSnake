@@ -3,9 +3,9 @@
 
 #include "../../../common/types.h"
 
-#define MAX_MAP_HEIGHT 48
-#define MAX_MAP_WIDTH 64
-#define MAX_TILE_SIZE 10
+#define MAX_MAP_HEIGHT 28
+#define MAX_MAP_WIDTH 32
+#define MAX_TILE_SIZE 8
 
 #define TIMEOUT_SCREEN_MAX_CYCLES 300
 #define CREDITS_SCREEN_MAX_CYCLES 600
@@ -18,20 +18,20 @@ typedef enum
 	OBJECT_NOTHING = 0, OBJECT_APPLE, OBJECT_SNAKE
 }object;
 
-typedef struct snake_node
+struct snake_node
 {
 	int dir;
 	int x;
 	int y;
 	struct snake_node *next;
-}snake_node;
+};
 
-typedef struct game_config
+struct game_config
 {
 	int map_height;
 	int map_width;
 	int tile_size;
-}game_config;
+};
 
 
 typedef enum
