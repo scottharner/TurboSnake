@@ -17,7 +17,7 @@ INCDIR := d:/huc/include/hucc
 # This can be overriden in a user's project.
 
 # ifeq ($(PCE_BINPATH),)
-BINDIR := ../../../bin
+BINDIR := d:/huc/bin
 # else
 # ifeq ($(OS),Windows_NT)
 # BINDIR := $(subst \,/,$(PCE_BINPATH))
