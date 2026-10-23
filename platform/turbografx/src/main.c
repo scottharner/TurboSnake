@@ -335,7 +335,7 @@
 //     jo_sprite_disable_vertical_flip();
 // }
 
-// void platform_draw_game_screen(int *object_map, int score, bool did_mode_change, game_config *config, int high_score)
+// void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, game_config *config, int high_score)
 // {
 //     if (did_mode_change)
 //     {        

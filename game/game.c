@@ -8,12 +8,17 @@
 *   Author: Scott Harner
 */
 
+static struct game_config game_config_data;
+static unsigned char object_map_data[MAX_MAP_CELLS];
+static struct snake_node snake_nodes[MAX_SNAKE_NODES];
 static struct game_config* config;
-static int *object_map;//This will contain all the objects. will use it to keep track of collisions
+static unsigned char *object_map;//This will contain all the objects. will use it to keep track of collisions
+static struct snake_node* player;
+
 static speed game_speed = SPEED_SLOW;
 static int score;//score for the game
 static int high_score = 0;
-static struct snake_node* player;
+static int snake_nodes_used = 0;
 static mode game_mode;
 static mode previous_game_mode;
 static int action_cycles;
@@ -30,6 +35,22 @@ static option title_option = OPTION_START;
 // track key changes for better title menu input handling
 static bool current_input_states[INPUT_TYPE_COUNT];
 static bool previous_input_states[INPUT_TYPE_COUNT];
+
+static struct snake_node *allocate_snake_node(void)
+{
+    struct snake_node *node;
+
+    if (snake_nodes_used >= MAX_SNAKE_NODES)
+    {
+        return NULL;
+    }
+
+    node = &snake_nodes[snake_nodes_used];
+    snake_nodes_used++;
+
+    node->next = NULL;
+    return node;
+}
 
 // finds a random location to place the next apple
 static void generate_new_apple()
@@ -289,7 +310,10 @@ static void move(input_type current_input)
         new_node_x = temp->x; //when we reach the final node, we store its location with two variables
         new_node_y = temp->y;
         player = move_body(player, temp_x,temp_y);
-        new_node = platform_memory_allocate(sizeof(struct snake_node)); //after we move the whole body we make a new node line( screen, 130, 130, 150, 150, makecol( 255, 0, 0));
+        new_node = allocate_snake_node(); //after we move the whole body we make a new node line( screen, 130, 130, 150, 150, makecol( 255, 0, 0));
+        if (new_node == NULL)
+            return;
+
         new_node->x = new_node_x;
         new_node->y = new_node_y; //we set this new node's location variables
         new_node->dir = temp->dir;
@@ -454,15 +478,14 @@ void game_update(void)
 // platform agnostic primary game logic
 void game_initialize(int map_height, int map_width, int tile_size)
 {
+    config = &game_config_data;
+    object_map = object_map_data;
     platform_initialize();
     previous_game_mode = MODE_NONE;
-    player = platform_memory_allocate(sizeof(struct snake_node));
-    player->next = NULL;
-    config = platform_memory_allocate(sizeof(struct game_config));
+
     config->map_height = map_height;
     config->map_width = map_width;
     config->tile_size = tile_size;
-    object_map = platform_memory_allocate(config->map_height * config->map_width * sizeof(int));
 
     game_reset();
 }
@@ -476,26 +499,14 @@ bool game_input_pressed(input_type candidate_input)
 void game_save_previous_inputstates()
 {
     // save previous state
-    for (int i = 0; i < INPUT_TYPE_COUNT; i++)
+    int i;
+    for (i = 0; i < INPUT_TYPE_COUNT; i++)
         previous_input_states[i] = current_input_states[i];
-}
-
-static void free_snake()
-{
-    struct snake_node *current = player->next;
-
-    while (current != NULL)
-    {
-        struct snake_node *next = current->next;
-        platform_memory_free(current);
-        current = next;
-    }
-
-    player->next = NULL;
 }
 
 void game_reset()
 {
+    int i, j; //this is so we don't get errors because the object map references nothing.
     platform_reset(config);
 
     game_mode = MODE_TITLE;
@@ -505,14 +516,18 @@ void game_reset()
     apple_x = -1;
     apple_y = -1;
     
-     if (player->next != NULL)
-         free_snake();
+    snake_nodes_used = 0;
+    player = allocate_snake_node();
+    if (player == NULL) 
+    {
+        snake_length = 0;
+        return;
+    }
 
     player->dir =  INPUT_TYPE_LEFT; //init direction
     player->x = (config->map_width)/2;
     player->y = (config->map_height)/2;
 
-    int i, j; //this is so we don't get errors because the object map references nothing.
     for (i = 0; i < config->map_height; i++)
     {
         for (j = 0; j < config->map_width; j++)
@@ -524,24 +539,5 @@ void game_reset()
 
 void game_shutdown(void)
 {
-    free_snake();
-    if (player != NULL)
-    {
-        platform_memory_free(player);
-        player = NULL;
-    }
-
-    if (config != NULL)
-    {
-        platform_memory_free(config);
-        config = NULL;
-    }
-
-    if (object_map != NULL)
-    {
-        platform_memory_free(object_map);
-        object_map = NULL;
-    }
-
     platform_shutdown();
 }
