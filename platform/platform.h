@@ -1,8 +1,8 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
-#include "../common/types.h"
-#include "../game/game.h"
+#include "../../../common/types.h"
+#include "../../../game/game.h"
 
 void platform_initialize();
 void platform_shutdown();

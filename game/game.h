@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "../common/types.h"
+#include "../../../common/types.h"
 
 #define MAX_MAP_HEIGHT 48
 #define MAX_MAP_WIDTH 64

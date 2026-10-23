@@ -1,7 +1,7 @@
 
 // #include <jo/jo.h>
 // #include <string.h>
-// #include "../../platform.h"
+#include "../../platform.h"
 // #include "pcmsys.h"
 #include "huc.h"
 

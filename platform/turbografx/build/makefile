@@ -2,7 +2,7 @@ all: game.pce
 
 include Make_game.inc
 
-SRC = ../src/main.c
+SRC = ../src/main.c ../../../game/game.c
 
 CFLAGS ?= -v -O2 -fno-recursive -gC
 
