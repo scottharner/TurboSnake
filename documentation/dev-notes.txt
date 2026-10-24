@@ -2,6 +2,10 @@ turbografx
 ----------
 - had to set pce_include env var and add huc/bin to path
 - i am running make from windows cmd prompt
+- to print multiple text colors on the same screen you have swap palettes using set_font_pal
+	- each of these palettes has 16 colors
+	- for two different colors and an easy swap, i set index 1 of each palette as the color i wanted (1, 17, etc) using set_font_color
+	- then during the game i can call set_font_pal as needed to change the color used
 
 general
 -------

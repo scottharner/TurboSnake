@@ -21,7 +21,9 @@
 #define TILE_SIZE 8
 #define BLACK_COLOR_INDEX 0
 #define WHITE_COLOR_INDEX 1
-#define YELLOW_COLOR_INDEX 2
+#define YELLOW_COLOR_INDEX 17
+#define WHITE_PALETTE_INDEX 0
+#define YELLOW_PALETTE_INDEX 1
 // #define TITLE_TRACKID 3
 // #define GAME_TRACKID 2
 
@@ -43,7 +45,7 @@ void platform_initialize()
     set_color_rgb(WHITE_COLOR_INDEX, 7, 7, 7); // first color index is white
     set_color_rgb(YELLOW_COLOR_INDEX, 7, 7, 0); // second color is yellow
 	set_font_color(WHITE_COLOR_INDEX, BLACK_COLOR_INDEX);
-	set_font_pal(0);
+	set_font_pal(WHITE_PALETTE_INDEX);
 	load_default_font();
 
 //     jo_core_init(JO_COLOR_Black);
@@ -177,10 +179,10 @@ void platform_draw_credits_screen(bool did_mode_change)
 }
 
 // calculate the color to display for a menu option
-static int get_option_color(option selected_option, option display_option)
+static int get_option_palette(option selected_option, option display_option)
 {
-    int selected_color = YELLOW_COLOR_INDEX;
-    int default_color = WHITE_COLOR_INDEX;
+    int selected_color = YELLOW_PALETTE_INDEX;
+    int default_color = WHITE_PALETTE_INDEX;
     return selected_option == display_option ? selected_color : default_color;
 }
 
@@ -204,15 +206,15 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
 
     // draw_tile(0, 0, title_sprite_id, BORDER_ZINDEX, 0);
 
-    set_font_color(get_option_color(title_option, OPTION_START), BLACK_COLOR_INDEX);
+    set_font_pal(get_option_palette(title_option, OPTION_START));
     put_string("Start Game", get_centered_x_coord("Start Game"), 12);
     sprintf(speed_menu_string, "Speed: < %s >", speed_string);
-    set_font_color(get_option_color(title_option, OPTION_SPEED), BLACK_COLOR_INDEX);
+    set_font_pal(get_option_palette(title_option, OPTION_SPEED));
     put_string(speed_menu_string, get_centered_x_coord(speed_menu_string), 14);
-    set_font_color(get_option_color(title_option, OPTION_CREDITS), BLACK_COLOR_INDEX);
+    set_font_pal(get_option_palette(title_option, OPTION_CREDITS));
     put_string("Credits", get_centered_x_coord("Credits"), 16);
 
-    set_font_color(WHITE_COLOR_INDEX, BLACK_COLOR_INDEX);
+    set_font_pal(WHITE_PALETTE_INDEX);
     put_string("Game (C) 2010 Stephen Bryant", get_centered_x_coord("Game (C) 2010 Stephen Bryant"), 24);
     put_string("Port (C) 2026 Scott Harner", get_centered_x_coord("Port (C) 2026 Scott Harner"), 26);
 }
