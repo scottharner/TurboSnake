@@ -1,6 +1,7 @@
 #include "../../../common/types.h"
 #include "../../../game/game.h"
 #include "../../../platform/platform.h"
+#include <stdio.h>
 
 /*
 *   Snake: Platform agnostic game logic.

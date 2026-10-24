@@ -1,6 +1,6 @@
 
 // #include <jo/jo.h>
-// #include <string.h>
+#include <stdio.h>
 #include "../../platform.h"
 // #include "pcmsys.h"
 #include "huc.h"
@@ -184,30 +184,31 @@ static int get_option_color(option selected_option, option display_option)
     return selected_option == display_option ? selected_color : default_color;
 }
 
-// void platform_copy_string(char * buffer, char * source)
-// {
-//     strcpy(buffer, source);
-// }
+void platform_copy_string(char * buffer, char * source)
+{
+    strcpy(buffer, source);
+}
 
 // display a title screen
 void platform_draw_title_screen(bool did_mode_change, option title_option)
 {
+    char speed_string[6];
+    char speed_menu_string[20];
     if (did_mode_change)
     {
         cls();
         // CDDA_PlaySingle(TITLE_TRACKID, true);
     }
 
-    // char speed_string[6];
-    // game_get_speed_string(speed_string);
+    game_get_speed_string(speed_string);
 
     // draw_tile(0, 0, title_sprite_id, BORDER_ZINDEX, 0);
 
     set_font_color(get_option_color(title_option, OPTION_START), BLACK_COLOR_INDEX);
     put_string("Start Game", get_centered_x_coord("Start Game"), 12);
-    // char speed_menu_string[20];
-    // sprintf(speed_menu_string, "Speed: < %-6s >", speed_string);
-    // print_centered_text(14, speed_menu_string, get_option_color(title_option, OPTION_SPEED));
+    sprintf(speed_menu_string, "Speed: < %-6s >", speed_string);
+    set_font_color(get_option_color(title_option, OPTION_SPEED), BLACK_COLOR_INDEX);
+    put_string(speed_menu_string, get_centered_x_coord(speed_menu_string), 14);
     set_font_color(get_option_color(title_option, OPTION_CREDITS), BLACK_COLOR_INDEX);
     put_string("Credits", get_centered_x_coord("Credits"), 16);
 
