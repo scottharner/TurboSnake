@@ -19,6 +19,9 @@
 #define HALF_MAP_WIDTH 16
 #define MAP_WIDTH 32
 #define TILE_SIZE 8
+#define BLACK_COLOR_INDEX 0
+#define WHITE_COLOR_INDEX 1
+#define YELLOW_COLOR_INDEX 2
 // #define TITLE_TRACKID 3
 // #define GAME_TRACKID 2
 // #define COPYRIGHT_INDEX 64
@@ -38,8 +41,9 @@
 // Saturn implementation of platform initialization
 void platform_initialize()
 {
-    set_color_rgb(1, 7, 7, 7); // first color index is white
-	set_font_color(1, 0);
+    set_color_rgb(WHITE_COLOR_INDEX, 7, 7, 7); // first color index is white
+    set_color_rgb(YELLOW_COLOR_INDEX, 7, 7, 0); // second color is yellow
+	set_font_color(WHITE_COLOR_INDEX, BLACK_COLOR_INDEX);
 	set_font_pal(0);
 	load_default_font();
 
@@ -173,13 +177,13 @@ void platform_draw_credits_screen(bool did_mode_change)
 //     print_centered_text(28, "Powered By - Jo Engine", JO_COLOR_INDEX_White);
 }
 
-// // calculate the color to display for a menu option
-// static int get_option_color(option selected_option, option display_option)
-// {
-//     int selected_color = JO_COLOR_INDEX_Yellow;
-//     int default_color = JO_COLOR_INDEX_White;
-//     return selected_option == display_option ? selected_color : default_color;
-// }
+// calculate the color to display for a menu option
+static int get_option_color(option selected_option, option display_option)
+{
+    int selected_color = YELLOW_COLOR_INDEX;
+    int default_color = WHITE_COLOR_INDEX;
+    return selected_option == display_option ? selected_color : default_color;
+}
 
 // void platform_copy_string(char * buffer, char * source)
 // {
@@ -200,12 +204,13 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
 
     // draw_tile(0, 0, title_sprite_id, BORDER_ZINDEX, 0);
 
+    set_font_color(get_option_color(title_option, OPTION_START), BLACK_COLOR_INDEX);
     put_string("Start Game", get_centered_x_coord("Start Game"), 12);
-    // print_centered_text(12, "Start Game", get_option_color(title_option, OPTION_START));
     // char speed_menu_string[20];
     // sprintf(speed_menu_string, "Speed: < %-6s >", speed_string);
     // print_centered_text(14, speed_menu_string, get_option_color(title_option, OPTION_SPEED));
-    // print_centered_text(16, "Credits", get_option_color(title_option, OPTION_CREDITS));
+    set_font_color(get_option_color(title_option, OPTION_CREDITS), BLACK_COLOR_INDEX);
+    put_string("Credits", get_centered_x_coord("Credits"), 16);
 
     // char copyright = (char)COPYRIGHT_INDEX;
     // char copyright_string[30];
