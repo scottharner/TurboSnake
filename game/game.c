@@ -380,7 +380,7 @@ void game_get_speed_string(char* buffer)
 {
     if (game_speed == SPEED_SLOW)
     {
-        platform_copy_string(buffer, "Slow");
+        platform_copy_string(buffer, "Slow  ");
     }
     else if (game_speed == SPEED_MEDIUM)
     {
@@ -388,7 +388,7 @@ void game_get_speed_string(char* buffer)
     }
     else
     {
-        platform_copy_string(buffer, "Fast");
+        platform_copy_string(buffer, "Fast  ");
     }
 }
 

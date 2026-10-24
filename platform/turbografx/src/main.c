@@ -206,7 +206,7 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
 
     set_font_color(get_option_color(title_option, OPTION_START), BLACK_COLOR_INDEX);
     put_string("Start Game", get_centered_x_coord("Start Game"), 12);
-    sprintf(speed_menu_string, "Speed: < %-6s >", speed_string);
+    sprintf(speed_menu_string, "Speed: < %s >", speed_string);
     set_font_color(get_option_color(title_option, OPTION_SPEED), BLACK_COLOR_INDEX);
     put_string(speed_menu_string, get_centered_x_coord(speed_menu_string), 14);
     set_font_color(get_option_color(title_option, OPTION_CREDITS), BLACK_COLOR_INDEX);
@@ -250,28 +250,30 @@ void platform_shutdown()
     // we dont have any shutdown steps to perform on this platform
 }
 
-// // track all current and previous input states so we can check on input presses
-// static void update_input_states(bool current_input_states[INPUT_TYPE_COUNT])
-// {
-//     game_save_previous_inputstates();
+// track all current and previous input states so we can check on input presses
+static void update_input_states(bool current_input_states[INPUT_TYPE_COUNT], int pad1_status)
+{
+    game_save_previous_inputstates();
 
-//     // read current state
-//     current_input_states[INPUT_TYPE_UP] = jo_is_pad1_key_pressed(JO_KEY_UP);
-//     current_input_states[INPUT_TYPE_DOWN] = jo_is_pad1_key_pressed(JO_KEY_DOWN);
-//     current_input_states[INPUT_TYPE_LEFT] = jo_is_pad1_key_pressed(JO_KEY_LEFT);
-//     current_input_states[INPUT_TYPE_RIGHT] = jo_is_pad1_key_pressed(JO_KEY_RIGHT);
-//     current_input_states[INPUT_TYPE_START] = jo_is_pad1_key_pressed(JO_KEY_START);    
-// }
+    // read current state
+    current_input_states[INPUT_TYPE_UP] = pad1_status & JOY_UP;
+    current_input_states[INPUT_TYPE_DOWN] = pad1_status & JOY_DOWN;
+    current_input_states[INPUT_TYPE_LEFT] = pad1_status & JOY_LEFT;
+    current_input_states[INPUT_TYPE_RIGHT] = pad1_status & JOY_RIGHT;
+    current_input_states[INPUT_TYPE_START] = pad1_status & JOY_RUN;    
+}
 
 // retrieve the input type from the user
 input_type platform_get_input_type(mode game_mode, bool current_input_states[INPUT_TYPE_COUNT])
 {
+    int pad1_status;
     input_type current_input = INPUT_TYPE_NOTHING;
-    // if (jo_is_pad1_available())
-    // {
-    //     update_input_states(current_input_states);
-    //     switch(game_mode)
-    //     {
+    pad1_status = joy(0);
+    if (pad1_status)
+    {
+        update_input_states(current_input_states, pad1_status);
+        switch(game_mode)
+        {
     //         case MODE_GAME:
 
     //             if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;
@@ -282,21 +284,21 @@ input_type platform_get_input_type(mode game_mode, bool current_input_states[INP
 
     //             break;
 
-    //         default:
+            default:
 
-    //             if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;    
-    //             else if (game_input_pressed(INPUT_TYPE_DOWN)) current_input = INPUT_TYPE_DOWN;
-    //             else if (game_input_pressed(INPUT_TYPE_UP)) current_input = INPUT_TYPE_UP;
-    //             else if (game_input_pressed(INPUT_TYPE_LEFT)) current_input = INPUT_TYPE_LEFT;
-    //             else if (game_input_pressed(INPUT_TYPE_RIGHT)) current_input = INPUT_TYPE_RIGHT;
+                if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;    
+                else if (game_input_pressed(INPUT_TYPE_DOWN)) current_input = INPUT_TYPE_DOWN;
+                else if (game_input_pressed(INPUT_TYPE_UP)) current_input = INPUT_TYPE_UP;
+                else if (game_input_pressed(INPUT_TYPE_LEFT)) current_input = INPUT_TYPE_LEFT;
+                else if (game_input_pressed(INPUT_TYPE_RIGHT)) current_input = INPUT_TYPE_RIGHT;
 
-    //             break;
-    //     }
-    // }
-    // else
-    // {
-    //     game_reset_input_states();
-    // }
+                break;
+        }
+    }
+    else
+    {
+        game_reset_input_states();
+    }
 
     return current_input; // todo - implement
 }
