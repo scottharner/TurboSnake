@@ -24,7 +24,6 @@
 #define YELLOW_COLOR_INDEX 2
 // #define TITLE_TRACKID 3
 // #define GAME_TRACKID 2
-// #define COPYRIGHT_INDEX 64
 
 // static int snake_sprite_id;
 // static int apple_sprite_id;
@@ -212,12 +211,9 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
     set_font_color(get_option_color(title_option, OPTION_CREDITS), BLACK_COLOR_INDEX);
     put_string("Credits", get_centered_x_coord("Credits"), 16);
 
-    // char copyright = (char)COPYRIGHT_INDEX;
-    // char copyright_string[30];
-    // sprintf(copyright_string, "Game %c 2010 Stephen Bryant", copyright);
-    // print_centered_text(26, copyright_string, JO_COLOR_INDEX_White);
-    // sprintf(copyright_string, "Port %c 2026 Scott Harner", copyright);
-    // print_centered_text(28, copyright_string, JO_COLOR_INDEX_White);
+    set_font_color(WHITE_COLOR_INDEX, BLACK_COLOR_INDEX);
+    put_string("Game (C) 2010 Stephen Bryant", get_centered_x_coord("Game (C) 2010 Stephen Bryant"), 24);
+    put_string("Port (C) 2026 Scott Harner", get_centered_x_coord("Port (C) 2026 Scott Harner"), 26);
 }
 
 // platform specific setting of random generator seed
