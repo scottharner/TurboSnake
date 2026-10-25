@@ -24,12 +24,15 @@
 #define YELLOW_COLOR_INDEX 241
 #define WHITE_PALETTE_INDEX 14
 #define YELLOW_PALETTE_INDEX 15
-// #define TITLE_TRACKID 3
-// #define GAME_TRACKID 2
+#define TITLE_TRACKID 2
+#define GAME_TRACKID 3
 
-#incchr(title_tiles, "../assets/tex/title.png")
-#incpal(title_palette, "../assets/tex/title.png", 0, 1)
-#incbat(title_map, "../assets/tex/title.png", 0x1000, 32, 6)
+#incchr(title_tiles, "../assets/images/title.png")
+#incpal(title_palette, "../assets/images/title.png", 0, 1)
+#incbat(title_map, "../assets/images/title.png", 0x1000, 32, 6)
+#incchr(credits_tiles, "../assets/images/credits.png")
+#incpal(credits_palette, "../assets/images/credits.png", 0, 1)
+#incbat(credits_map, "../assets/images/credits.png", 0x1000, 32, 5)
 
 // static int snake_sprite_id;
 // static int apple_sprite_id;
@@ -46,8 +49,8 @@
 // Saturn implementation of platform initialization
 void platform_initialize()
 {
-    set_color_rgb(WHITE_COLOR_INDEX, 7, 7, 7); // first color index is white
-    set_color_rgb(YELLOW_COLOR_INDEX, 7, 7, 0); // second color is yellow
+    set_color_rgb(WHITE_COLOR_INDEX, 7, 7, 7);
+    set_color_rgb(YELLOW_COLOR_INDEX, 7, 7, 0);
 	set_font_color(WHITE_COLOR_INDEX, BLACK_COLOR_INDEX);
 	set_font_pal(WHITE_PALETTE_INDEX);
 	load_default_font();
@@ -161,25 +164,23 @@ void platform_draw_win_screen(int score, bool did_mode_change)
 // display a credits screen
 void platform_draw_credits_screen(bool did_mode_change)
 {
-    // todo - implement
-//     if (did_mode_change)
-//     {
-//         CDDA_Stop(); // stop game music
-//         jo_clear_screen();
-//     }
+    if (did_mode_change)
+    {
+        cd_reset(); // stop game music
+        cls();
+        load_vram(0x1000, credits_tiles, 0x0A00);
+        load_palette(0, credits_palette, 1);
+        load_bat(0x0000, credits_map, 32, 5);
+    }
 
-//     draw_tile(0, 0, credits_sprite_id, BORDER_ZINDEX, 0);
-
-//     print_centered_text(7, "Game Engineer - Stephen Bryant", JO_COLOR_INDEX_White);
-//     print_centered_text(9, "Port Engineer - Scott Harner", JO_COLOR_INDEX_White);
-//     print_centered_text(11, "QA Tester - Evan Harner", JO_COLOR_INDEX_White);
-//     print_centered_text(13, "Music Composer - Safety Stoat Studios", JO_COLOR_INDEX_White);
-//     print_centered_text(15, "Sound Effects Designer - Kronbits", JO_COLOR_INDEX_White);
-//     print_centered_text(17, "Audio Driver Engineer - Ponut64", JO_COLOR_INDEX_White);
-//     print_centered_text(19, "Advisor - ReyeMe", JO_COLOR_INDEX_White);
-//     print_centered_text(21, "Advisor - Hassmaschine", JO_COLOR_INDEX_White);
-//     print_centered_text(23, "Advisor - supahfly", JO_COLOR_INDEX_White);
-//     print_centered_text(28, "Powered By - Jo Engine", JO_COLOR_INDEX_White);
+    set_font_pal(WHITE_PALETTE_INDEX);
+    put_string("Game Engineer - Stephen Bryant", get_centered_x_coord("Game Engineer - Stephen Bryant"), 7);
+    put_string("Port Engineer - Scott Harner", get_centered_x_coord("Port Engineer - Scott Harner"), 9);
+    put_string("QA Tester - Evan Harner", get_centered_x_coord("QA Tester - Evan Harner"), 11);
+    put_string("Music - Safety Stoat Studios", get_centered_x_coord("Music - Safety Stoat Studios"), 13);
+    put_string("Sound Effects - Kronbits", get_centered_x_coord("Sound Effects - Kronbits"), 15);
+    put_string("Advisor - Elmer", get_centered_x_coord("Advisor - Elmer"), 17);
+    put_string("Powered By - HuCC", get_centered_x_coord("Powered By - HuCC"), 26);
 }
 
 // calculate the color to display for a menu option
@@ -203,9 +204,10 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
     if (did_mode_change)
     {
         cls();
-        cd_playtrk(2, 3, CDPLAY_REPEAT);
-        load_background(title_tiles, title_palette, title_map, 32, 6);
-        set_color_rgb(WHITE_COLOR_INDEX, 7, 7, 7);
+        cd_playtrk(TITLE_TRACKID, GAME_TRACKID, CDPLAY_REPEAT);
+        load_vram(0x1000, title_tiles, 0x0C00);
+        load_palette(0, title_palette, 1);
+        load_bat(0x0000, title_map, 32, 6);
     }
 
     game_get_speed_string(speed_string);

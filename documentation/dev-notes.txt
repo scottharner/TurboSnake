@@ -6,6 +6,16 @@ turbografx
 	- each of these palettes has 16 colors
 	- for two different colors and an easy swap, i set index 1 of each palette as the color i wanted (1, 17, etc) using set_font_color
 	- then during the game i can call set_font_pal as needed to change the color used
+- load_background should be avoided as it can wipe all the palettes
+- i used these to finally load a background graphic
+	- load_vram(0x1000, title_tiles, 0x0C00);
+		- the math on the last parameter is tricky
+		- Each 4-bit (this is the color depth the image was saved at), 8 × 8 tile uses 32 bytes of graphics data, or 16 words (a word is 2 bytes).
+		- 16 x 32 x 6 = 3072 = 0x0C00
+		- 0x1000 is the typical starting vram address for tile graphics
+	- load_palette(0, title_palette, 1);
+    - load_bat(0x0000, title_map, 32, 6);
+		- this is loading map data
 
 general
 -------
