@@ -10,3 +10,4 @@ game.iso: $(SRC)
 	$(CC) $(CFLAGS) $(SRC) $(LIBS)
 	cmd /c move ..\src\main.iso game.iso
 	cmd /c copy ..\assets\bgm\title.wav title.wav
+	cmd /c copy ..\assets\bgm\game.wav game.wav

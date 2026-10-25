@@ -5,3 +5,6 @@ FILE "game.iso" BINARY
 FILE "title.wav" WAVE
   TRACK 02 AUDIO
     INDEX 01 00:00:00
+FILE "game.wav" WAVE
+  TRACK 03 AUDIO
+    INDEX 01 00:00:00

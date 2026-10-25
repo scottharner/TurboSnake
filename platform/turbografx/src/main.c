@@ -375,12 +375,12 @@ void platform_reset(struct game_config *config)
 void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
 {
     // todo - implement
-//     if (did_mode_change)
-//     {        
-//         CDDA_Stop(); // stop title
-//         CDDA_PlaySingle(GAME_TRACKID, true);
-//         jo_clear_screen();
-//     }
+    if (did_mode_change)
+    {        
+        cd_reset(); // stop game music
+        cd_playtrk(GAME_TRACKID, GAME_TRACKID+1, CDPLAY_REPEAT);
+        cls();
+    }
 
 //     int i,j;
 //     //O(N^2) runtime for this, 24^2 is pretty big.. so we may change this
