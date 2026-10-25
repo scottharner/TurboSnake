@@ -10,8 +10,8 @@ if not exist %MEDNAFEN_EXECUTABLE_PATH% (
 	exit
 )
 
-if exist game.pce (
-"%MEDNAFEN_EXECUTABLE_PATH%" "%cd%\game.pce" -sound.volume "150"
+if exist game.cue (
+"%MEDNAFEN_EXECUTABLE_PATH%" "%cd%\game.cue" -sound.volume "150"
 ) else (
 echo Please compile first !
 )

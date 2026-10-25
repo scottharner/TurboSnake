@@ -20,12 +20,16 @@
 #define MAP_WIDTH 32
 #define TILE_SIZE 8
 #define BLACK_COLOR_INDEX 0
-#define WHITE_COLOR_INDEX 1
-#define YELLOW_COLOR_INDEX 17
-#define WHITE_PALETTE_INDEX 0
-#define YELLOW_PALETTE_INDEX 1
+#define WHITE_COLOR_INDEX 225
+#define YELLOW_COLOR_INDEX 241
+#define WHITE_PALETTE_INDEX 14
+#define YELLOW_PALETTE_INDEX 15
 // #define TITLE_TRACKID 3
 // #define GAME_TRACKID 2
+
+#incchr(title_tiles, "../assets/tex/title.png")
+#incpal(title_palette, "../assets/tex/title.png", 0, 1)
+#incbat(title_map, "../assets/tex/title.png", 0x1000, 32, 6)
 
 // static int snake_sprite_id;
 // static int apple_sprite_id;
@@ -199,13 +203,14 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
     if (did_mode_change)
     {
         cls();
-        // CDDA_PlaySingle(TITLE_TRACKID, true);
+        cd_playtrk(2, 3, CDPLAY_REPEAT);
+        load_background(title_tiles, title_palette, title_map, 32, 6);
+        set_color_rgb(WHITE_COLOR_INDEX, 7, 7, 7);
     }
 
     game_get_speed_string(speed_string);
 
     // draw_tile(0, 0, title_sprite_id, BORDER_ZINDEX, 0);
-
     set_font_pal(get_option_palette(title_option, OPTION_START));
     put_string("Start Game", get_centered_x_coord("Start Game"), 12);
     sprintf(speed_menu_string, "Speed: < %s >", speed_string);
