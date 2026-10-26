@@ -33,6 +33,35 @@
 #incchr(credits_tiles, "../assets/images/credits.png")
 #incpal(credits_palette, "../assets/images/credits.png", 0, 1)
 #incbat(credits_map, "../assets/images/credits.png", 0x1000, 32, 5)
+#incchr_ex(border_tiles,
+    "../assets/tiles/bordertl.png", 0,0,1,1,0, \ 
+    "../assets/tiles/bordertr.png", 0,0,1,1,0, \ 
+    "../assets/tiles/borderbl.png", 0,0,1,1,0, \ 
+    "../assets/tiles/borderbr.png", 0,0,1,1,0, \ 
+    "../assets/tiles/borderl.png", 0,0,1,1,0, \ 
+    "../assets/tiles/borderr.png", 0,0,1,1,0, \ 
+    "../assets/tiles/bordert.png", 0,0,1,1,0, \ 
+    "../assets/tiles/borderb.png", 0,0,1,1,0
+)
+#incpal(game_palette, "../assets/tiles/bordertl.png", 0, 1)
+
+#define TILE_BORDER_TL  0
+#define TILE_BORDER_TR  1
+#define TILE_BORDER_BL  2
+#define TILE_BORDER_BR  3
+#define TILE_BORDER_L   4
+#define TILE_BORDER_R   5
+#define TILE_BORDER_T   6
+#define TILE_BORDER_B   7
+
+// #incchr(borderc_tile, "../assets/tiles/borderul.png")
+// #incchr(borderc_tile, "../assets/tiles/borderur.png")
+// #incchr(borderc_tile, "../assets/tiles/borderbl.png")
+// #incchr(borderc_tile, "../assets/tiles/borderbr.png")
+// #incchr(borderl_tile, "../assets/tiles/borderl.png")
+// #incchr(borderl_tile, "../assets/tiles/borderr.png")
+// #incchr(bordert_tile, "../assets/tiles/bordert.png")
+// #incchr(borderl_tile, "../assets/tiles/borderb.png")
 
 // static int snake_sprite_id;
 // static int apple_sprite_id;
@@ -323,54 +352,48 @@ void platform_reset(struct game_config *config)
     // no actions to perform on this platform
 }
 
-// static void draw_border(game_config *config)
-// {
-//     for (int i = 1; i < config->map_width-1; i++)
-//     {
-//         // top
-//         draw_tile(i * config->tile_size, 0, border_top_sprite_id, BORDER_ZINDEX, 0);
-//     }
+static void draw_border(struct game_config *config)
+{
+    int i;
+    set_tile_data(border_tiles);
+    load_tile(0x1000);
 
-//     jo_sprite_enable_vertical_flip();
-//     for (int i = 1; i < config->map_width-1; i++)
-//     {
-//         // bottom
-//         draw_tile(i * config->tile_size, (MAP_HEIGHT*config->tile_size)-config->tile_size-1, border_top_sprite_id, BORDER_ZINDEX, 0);
-//     }
-//     jo_sprite_disable_vertical_flip();
+    for (i = 1; i < config->map_width-1; i++)
+    {
+        // top
+        put_tile(TILE_BORDER_T, i, 0);
+    }
 
-//     for (int i = 1; i < config->map_height-1; i++)
-//     {
-//         // left
-//         draw_tile(0, i * config->tile_size, border_left_sprite_id, BORDER_ZINDEX, 0);
-//     }
+    for (i = 1; i < config->map_width-1; i++)
+    {
+        // bottom
+        put_tile(TILE_BORDER_B, i, config->map_height-1);
+    }
 
-//     jo_sprite_enable_horizontal_flip();
-//     for (int i = 1; i < config->map_height-1; i++)
-//     {
-//         // right
-//         draw_tile((MAP_WIDTH*config->tile_size)-config->tile_size-1, i * config->tile_size, border_left_sprite_id, BORDER_ZINDEX, 0);
-//     }
-//     jo_sprite_disable_horizontal_flip();
+    for (i = 1; i < config->map_height-1; i++)
+    {
+        // left
+        put_tile(TILE_BORDER_L, 0, i);
+    }
 
-//     // upper left
-//     draw_tile(0, 0, border_corner_sprite_id, BORDER_ZINDEX, 0);
+    for (i = 1; i < config->map_height-1; i++)
+    {
+        // right
+        put_tile(TILE_BORDER_R, config->map_width-1, i);
+    }
+
+    // upper left
+    put_tile(TILE_BORDER_TL, 0, 0);
     
-//     // upper right
-//     jo_sprite_enable_horizontal_flip();
-//     draw_tile((MAP_WIDTH*config->tile_size)-config->tile_size-1, 0, border_corner_sprite_id, BORDER_ZINDEX, 0);
-//     jo_sprite_disable_horizontal_flip();
+    // upper right
+    put_tile(TILE_BORDER_TR, config->map_width-1, 0);
 
-//     // lower left
-//     jo_sprite_enable_vertical_flip();
-//     draw_tile(0, (MAP_HEIGHT*config->tile_size)-config->tile_size-1, border_corner_sprite_id, BORDER_ZINDEX, 0);
+    // lower left
+    put_tile(TILE_BORDER_BL, 0, config->map_height-1);
 
-//     // lower right
-//     jo_sprite_enable_horizontal_flip();
-//     draw_tile((MAP_WIDTH*config->tile_size)-config->tile_size-1, (MAP_HEIGHT*config->tile_size)-config->tile_size-1, border_corner_sprite_id, BORDER_ZINDEX, 0);
-//     jo_sprite_disable_horizontal_flip();
-//     jo_sprite_disable_vertical_flip();
-// }
+    // lower right
+    put_tile(TILE_BORDER_BR, config->map_width-1, config->map_height-1);
+}
 
 void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
 {
@@ -380,6 +403,7 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
         cd_reset(); // stop game music
         cd_playtrk(GAME_TRACKID, GAME_TRACKID+1, CDPLAY_REPEAT);
         cls();
+        load_palette(0, game_palette, 1);
     }
 
 //     int i,j;
@@ -412,7 +436,7 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
 //     jo_printf_with_color(JO_GRID_WIDTH-10, 1, JO_COLOR_INDEX_White, "Score: %d", score);
 //     jo_printf_with_color(3, 1, JO_COLOR_INDEX_White, "High Score: %d", high_score);
 
-//     draw_border(config);
+    draw_border(config);
 }
 
 main()
