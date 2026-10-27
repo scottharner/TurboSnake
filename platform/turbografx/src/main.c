@@ -405,6 +405,7 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
         cd_playtrk(GAME_TRACKID, GAME_TRACKID+1, CDPLAY_REPEAT);
         cls();
         load_palette(0, game_palette, 1);
+        draw_border(config);
     }
 
 //     int i,j;
@@ -438,9 +439,7 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
     sprintf(score_string, "Score: %d", score);
     put_string(score_string, config->map_width-12, 1);
     sprintf(high_score_string, "High Score: %d", high_score);
-    put_string(high_score_string, 0, 1);
-
-    draw_border(config);
+    put_string(high_score_string, 1, 1);
 }
 
 main()
