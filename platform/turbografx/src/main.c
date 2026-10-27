@@ -361,38 +361,38 @@ static void draw_border(struct game_config *config)
     for (i = 1; i < config->map_width-1; i++)
     {
         // top
-        put_tile(TILE_BORDER_T, i, 0);
+        put_tile(TILE_BORDER_B, i, 1);
     }
 
     for (i = 1; i < config->map_width-1; i++)
     {
         // bottom
-        put_tile(TILE_BORDER_B, i, config->map_height-1);
+        put_tile(TILE_BORDER_T, i, config->map_height-1);
     }
 
     for (i = 1; i < config->map_height-1; i++)
     {
         // left
-        put_tile(TILE_BORDER_L, 0, i);
+        put_tile(TILE_BORDER_R, 0, i);
     }
 
     for (i = 1; i < config->map_height-1; i++)
     {
         // right
-        put_tile(TILE_BORDER_R, config->map_width-1, i);
+        put_tile(TILE_BORDER_L, config->map_width-1, i);
     }
 
     // upper left
-    put_tile(TILE_BORDER_TL, 0, 0);
+    put_tile(TILE_BORDER_BR, 0, 1);
     
     // upper right
-    put_tile(TILE_BORDER_TR, config->map_width-1, 0);
+    put_tile(TILE_BORDER_BL, config->map_width-1, 1);
 
     // lower left
-    put_tile(TILE_BORDER_BL, 0, config->map_height-1);
+    put_tile(TILE_BORDER_TR, 0, config->map_height-1);
 
     // lower right
-    put_tile(TILE_BORDER_BR, config->map_width-1, config->map_height-1);
+    put_tile(TILE_BORDER_TL, config->map_width-1, config->map_height-1);
 }
 
 void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
@@ -437,9 +437,9 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
     // draw the score
     set_font_pal(WHITE_PALETTE_INDEX);    
     sprintf(score_string, "Score: %d", score);
-    put_string(score_string, config->map_width-12, 1);
+    put_string(score_string, config->map_width-12, 0);
     sprintf(high_score_string, "High Score: %d", high_score);
-    put_string(high_score_string, 1, 1);
+    put_string(high_score_string, 1, 0);
 }
 
 main()
