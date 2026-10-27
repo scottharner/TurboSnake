@@ -397,7 +397,8 @@ static void draw_border(struct game_config *config)
 
 void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
 {
-    // todo - implement
+    char score_string[15];
+    char high_score_string[20];
     if (did_mode_change)
     {        
         cd_reset(); // stop game music
@@ -432,9 +433,12 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
 //         }
 //     }
 
-//     //draw the score
-//     jo_printf_with_color(JO_GRID_WIDTH-10, 1, JO_COLOR_INDEX_White, "Score: %d", score);
-//     jo_printf_with_color(3, 1, JO_COLOR_INDEX_White, "High Score: %d", high_score);
+    // draw the score
+    set_font_pal(WHITE_PALETTE_INDEX);    
+    sprintf(score_string, "Score: %d", score);
+    put_string(score_string, config->map_width-12, 1);
+    sprintf(high_score_string, "High Score: %d", high_score);
+    put_string(high_score_string, 0, 1);
 
     draw_border(config);
 }
