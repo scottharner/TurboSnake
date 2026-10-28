@@ -1,23 +1,19 @@
 
-// #include <jo/jo.h>
 #include <stdio.h>
 #include "../../platform.h"
-// #include "pcmsys.h"
 #include "huc.h"
 
 /*
 *   Snake: Turbografx implementation of snake using hucc framework.
-*   Last Update: Oct 22, 2026
+*   Last Update: Oct 27, 2026
 *   Author: Scott Harner
 */
 
-// #define OBJECT_ZINDEX 450
-// #define BORDER_ZINDEX 500
-// #define JO_GRID_WIDTH (JO_TV_WIDTH / 8)
-// #define JO_GRID_HEIGHT (JO_TV_HEIGHT / 8)
-#define MAP_HEIGHT 28
-#define HALF_MAP_WIDTH 16
-#define MAP_WIDTH 32
+#define SCREEN_HEIGHT 28
+#define SCREEN_WIDTH 32
+#define HALF_SCREEN_WIDTH 16
+#define MAP_HEIGHT 25 // map has to be slightly smaller on turbo so tiles dont overwrite
+#define MAP_WIDTH 30
 #define TILE_SIZE 8
 #define BLACK_COLOR_INDEX 0
 #define WHITE_COLOR_INDEX 225
@@ -33,6 +29,7 @@
 #incchr(credits_tiles, "../assets/images/credits.png")
 #incpal(credits_palette, "../assets/images/credits.png", 0, 1)
 #incbat(credits_map, "../assets/images/credits.png", 0x1000, 32, 5)
+
 #incchr_ex(border_tiles,
     "../assets/tiles/bordertl.png", 0,0,1,1,0, \ 
     "../assets/tiles/bordertr.png", 0,0,1,1,0, \ 
@@ -54,24 +51,18 @@
 #define TILE_BORDER_T   6
 #define TILE_BORDER_B   7
 
-// #incchr(borderc_tile, "../assets/tiles/borderul.png")
-// #incchr(borderc_tile, "../assets/tiles/borderur.png")
-// #incchr(borderc_tile, "../assets/tiles/borderbl.png")
-// #incchr(borderc_tile, "../assets/tiles/borderbr.png")
-// #incchr(borderl_tile, "../assets/tiles/borderl.png")
-// #incchr(borderl_tile, "../assets/tiles/borderr.png")
-// #incchr(bordert_tile, "../assets/tiles/bordert.png")
-// #incchr(borderl_tile, "../assets/tiles/borderb.png")
+#incchr_ex(game_tiles,
+    "../assets/tiles/apple.png", 0,0,1,1,0, \ 
+    "../assets/tiles/snake.png", 0,0,1,1,0, \ 
+    "../assets/tiles/empty.png", 0,0,1,1,0
+)
 
-// static int snake_sprite_id;
-// static int apple_sprite_id;
-// static int border_top_sprite_id;
-// static int border_left_sprite_id;
-// static int border_corner_sprite_id;
-// static int title_sprite_id;
+#define TILE_APPLE  0
+#define TILE_SNAKE  1
+#define TILE_EMPTY  2
+
 // static int game_over_sprite_id;
 // static int you_win_sprite_id;
-// static int credits_sprite_id;
 // static short pickup_sound_id;
 // static short lose_sound_id;
 
@@ -84,34 +75,12 @@ void platform_initialize()
 	set_font_pal(WHITE_PALETTE_INDEX);
 	load_default_font();
 
-//     jo_core_init(JO_COLOR_Black);
-//     load_drv(ADX_MASTER_2304);
-//     snake_sprite_id = jo_sprite_add_tga("TEX", "SNAKE.TGA", JO_COLOR_Transparent);
-//     apple_sprite_id = jo_sprite_add_tga("TEX", "APPLE.TGA", JO_COLOR_Transparent);
-//     border_top_sprite_id = jo_sprite_add_tga("TEX", "BORDERT.TGA", JO_COLOR_Transparent);
-//     border_left_sprite_id = jo_sprite_add_tga("TEX", "BORDERL.TGA", JO_COLOR_Transparent);
-//     border_corner_sprite_id = jo_sprite_add_tga("TEX", "BORDERC.TGA", JO_COLOR_Transparent);
-//     title_sprite_id = jo_sprite_add_tga("TEX", "TITLE.TGA", JO_COLOR_Transparent);
 //     game_over_sprite_id = jo_sprite_add_tga("TEX", "GAMEOVER.TGA", JO_COLOR_Transparent);
 //     you_win_sprite_id = jo_sprite_add_tga("TEX", "YOUWIN.TGA", JO_COLOR_Transparent);
-//     credits_sprite_id = jo_sprite_add_tga("TEX", "CREDITS.TGA", JO_COLOR_Transparent);
 //     pickup_sound_id = load_8bit_pcm((Sint8 *)"PICKUP.PCM", 15360); // using ponetone due to issues with jo engine audio
 //     lose_sound_id = load_8bit_pcm((Sint8 *)"LOSE.PCM", 15360);
 //     CDDA_SetVolume(4);
 }
-
-// void draw_tile(int x, int y, int sprite_id, int z, int angle)
-// {
-//     if (angle == 0)
-//         jo_sprite_draw3D2(sprite_id, x, y, z);
-//     else
-//         jo_sprite_draw3D_and_rotate2(sprite_id, x, y, z, angle);
-
-// #if JO_DEBUG
-//     jo_printf_with_color(0, 0, JO_COLOR_INDEX_White, "tile x: %d", x);
-//     jo_printf_with_color(0, 1, JO_COLOR_INDEX_White, "tile y: %d", y);
-// #endif
-// }
 
 // plays the requested sound effect
 void platform_play_sound(sound_type current_sound_type)
@@ -127,19 +96,6 @@ void platform_play_sound(sound_type current_sound_type)
     // }
 }
 
-// static void print_centered_text(int y, const char *string, int color)
-// {
-//     int length = strlen(string);
-//     int x = HALF_MAP_WIDTH - (length / 2);
-
-//     if (x < 0)
-//     {
-//         x = 0;
-//     }
-
-//     jo_printf_with_color(x, y, color, string);
-// }
-
 static int get_centered_x_coord(char * text)
 {
     int length;
@@ -150,7 +106,7 @@ static int get_centered_x_coord(char * text)
         length++;
     }
 
-    return (MAX_MAP_WIDTH - length ) / 2;
+    return (SCREEN_WIDTH - length ) / 2;
 }
 
 // display a game over screen
@@ -352,92 +308,95 @@ void platform_reset(struct game_config *config)
     // no actions to perform on this platform
 }
 
-static void draw_border(struct game_config *config)
+static void draw_border()
 {
     int i;
     set_tile_data(border_tiles);
-    load_tile(0x1000);
+    load_tile(0x1000); // takes up 16 x 8 x 1 = 128 (0x0080)
 
-    for (i = 1; i < config->map_width-1; i++)
+    for (i = 1; i < SCREEN_WIDTH-1; i++)
     {
         // top
         put_tile(TILE_BORDER_B, i, 1);
     }
 
-    for (i = 1; i < config->map_width-1; i++)
+    for (i = 1; i < SCREEN_WIDTH-1; i++)
     {
         // bottom
-        put_tile(TILE_BORDER_T, i, config->map_height-1);
+        put_tile(TILE_BORDER_T, i, SCREEN_HEIGHT-1);
     }
 
-    for (i = 1; i < config->map_height-1; i++)
+    for (i = 1; i < SCREEN_HEIGHT-1; i++)
     {
         // left
         put_tile(TILE_BORDER_R, 0, i);
     }
 
-    for (i = 1; i < config->map_height-1; i++)
+    for (i = 1; i < SCREEN_HEIGHT-1; i++)
     {
         // right
-        put_tile(TILE_BORDER_L, config->map_width-1, i);
+        put_tile(TILE_BORDER_L, SCREEN_WIDTH-1, i);
     }
 
     // upper left
     put_tile(TILE_BORDER_BR, 0, 1);
     
     // upper right
-    put_tile(TILE_BORDER_BL, config->map_width-1, 1);
+    put_tile(TILE_BORDER_BL, SCREEN_WIDTH-1, 1);
 
     // lower left
-    put_tile(TILE_BORDER_TR, 0, config->map_height-1);
+    put_tile(TILE_BORDER_TR, 0, SCREEN_HEIGHT-1);
 
     // lower right
-    put_tile(TILE_BORDER_TL, config->map_width-1, config->map_height-1);
+    put_tile(TILE_BORDER_TL, SCREEN_WIDTH-1, SCREEN_HEIGHT-1);
 }
 
 void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
 {
+    int i,j;
     char score_string[15];
     char high_score_string[20];
+    unsigned char tile_id;
+    int tile_index;
     if (did_mode_change)
     {        
         cd_reset(); // stop game music
         cd_playtrk(GAME_TRACKID, GAME_TRACKID+1, CDPLAY_REPEAT);
         cls();
         load_palette(0, game_palette, 1);
-        draw_border(config);
+        draw_border();
+        set_tile_data(game_tiles);
+        load_tile(0x1080); // 1000 + 80 for border so we dont overwrite
     }
 
-//     int i,j;
-//     //O(N^2) runtime for this, 24^2 is pretty big.. so we may change this
-//     //but for now, we draw every tile every frame!
-//     for (i = 0; i < config->map_height; i++)
-//     {
-//         for (j = 0; j < config->map_width; j++)
-//         {
-//             int sprite_id;
-//             int tile_index = i * config->map_width + j;
-//             if (object_map[tile_index] == OBJECT_APPLE)
-//             {
-//                 sprite_id = apple_sprite_id;
-//             }
-//             else if (object_map[tile_index] == OBJECT_SNAKE)
-//             {
-//                 sprite_id = snake_sprite_id;
-//             }
-//             else
-//             {
-//                 continue;
-//             }
+    //O(N^2) runtime for this, 24^2 is pretty big.. so we may change this
+    //but for now, we draw every tile every frame!
+    for (i = 0; i < config->map_height; i++)
+    {
+        for (j = 0; j < config->map_width; j++)
+        {
+            tile_index = i * config->map_width + j;
+            if (object_map[tile_index] == OBJECT_APPLE)
+            {
+                tile_id = TILE_APPLE;
+            }
+            else if (object_map[tile_index] == OBJECT_SNAKE)
+            {
+                tile_id = TILE_SNAKE;
+            }
+            else
+            {
+                continue;
+            }
 
-//             draw_tile(config->tile_size*j, config->tile_size*i, sprite_id, OBJECT_ZINDEX, 0);
-//         }
-//     }
+            put_tile(tile_id, j+1, i+2);
+        }
+    }
 
     // draw the score
     set_font_pal(WHITE_PALETTE_INDEX);    
     sprintf(score_string, "Score: %d", score);
-    put_string(score_string, config->map_width-12, 0);
+    put_string(score_string, SCREEN_WIDTH-12, 0);
     sprintf(high_score_string, "High Score: %d", high_score);
     put_string(high_score_string, 1, 0);
 }
@@ -445,9 +404,6 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
 main()
 {
     game_initialize(MAP_HEIGHT, MAP_WIDTH, TILE_SIZE);
-	// jo_core_add_vblank_callback(sdrv_vblank_rq);
-    // jo_core_add_callback(game_update);
-    // jo_core_run();
 
     while (true)
     {
