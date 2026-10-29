@@ -18,5 +18,6 @@ void platform_play_sound(sound_type);
 void platform_reset(struct game_config *);
 void platform_copy_string(char *, char *);
 void platform_draw_credits_screen(bool);
+void platform_draw_tile(object, int, int);
 
 #endif

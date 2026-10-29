@@ -112,7 +112,8 @@ static int get_centered_x_coord(char * text)
 // display a game over screen
 void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type current_loss_type)
 {
-    // todo - implement
+    char score_string[12];
+    char reason_string[25];
     if (did_mode_change)
     {
         cd_reset(); // stop game music
@@ -120,13 +121,12 @@ void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type c
     }
 
 //     draw_tile(0, 40, game_over_sprite_id, BORDER_ZINDEX, 0);
-
-//     char score_string[12];
-//     sprintf(score_string, "Score: %d", score);
-//     print_centered_text(10, score_string, JO_COLOR_INDEX_White);
-//     char reason_string[25];
-//     sprintf(reason_string, "Reason: %s", current_loss_type == LOSS_TYPE_SELF ? "Self Collision" : "Wall Collision");
-//     print_centered_text(12, reason_string, JO_COLOR_INDEX_White);
+    
+    set_font_pal(WHITE_PALETTE_INDEX);
+    sprintf(score_string, "Score: %d", score);
+    put_string(score_string, get_centered_x_coord(score_string), 10);
+    sprintf(reason_string, "Reason: %s", current_loss_type == LOSS_TYPE_SELF ? "Self Collision" : "Wall Collision");
+    put_string(reason_string, get_centered_x_coord(reason_string), 12);
 }
 
 // display a win screen
@@ -336,11 +336,34 @@ static void draw_border()
     put_tile(TILE_BORDER_TL, SCREEN_WIDTH-1, SCREEN_HEIGHT-1);
 }
 
+platform_draw_scores(int score, int high_score)
+{
+    char score_string[15];
+    char high_score_string[20];
+
+    // draw the score
+    set_font_pal(WHITE_PALETTE_INDEX);    
+    sprintf(score_string, "Score: %d", score);
+    put_string(score_string, SCREEN_WIDTH-12, 0);
+    sprintf(high_score_string, "High Score: %d", high_score);
+    put_string(high_score_string, 1, 0);
+}
+
+void platform_draw_tile(object tile_object, int tile_x, int tile_y)
+{
+    unsigned char tile_id;
+    tile_id = TILE_EMPTY;
+    if (tile_object == OBJECT_APPLE)
+        tile_id = TILE_APPLE;
+    else if (tile_object == OBJECT_SNAKE)
+        tile_id = TILE_SNAKE;
+    
+    put_tile(tile_id, tile_x+1, tile_y+2);
+}
+
 void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
 {
     int i,j;
-    char score_string[15];
-    char high_score_string[20];
     unsigned char tile_id;
     int tile_index;
     if (did_mode_change)
@@ -352,6 +375,7 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
         draw_border();
         set_tile_data(game_tiles);
         load_tile(0x1080); // 1000 + 80 for border so we dont overwrite
+        platform_draw_scores(score, high_score);
     }
 
     //O(N^2) runtime for this, 24^2 is pretty big.. so we may change this
@@ -361,29 +385,12 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
         for (j = 0; j < config->map_width; j++)
         {
             tile_index = i * config->map_width + j;
-            if (object_map[tile_index] == OBJECT_APPLE)
-            {
-                tile_id = TILE_APPLE;
-            }
-            else if (object_map[tile_index] == OBJECT_SNAKE)
-            {
-                tile_id = TILE_SNAKE;
-            }
-            else
-            {
+            if (object_map[tile_index] == OBJECT_NOTHING)
                 continue;
-            }
-
-            put_tile(tile_id, j+1, i+2);
+            else
+                platform_draw_tile(object_map[tile_index], j, i);
         }
     }
-
-    // draw the score
-    set_font_pal(WHITE_PALETTE_INDEX);    
-    sprintf(score_string, "Score: %d", score);
-    put_string(score_string, SCREEN_WIDTH-12, 0);
-    sprintf(high_score_string, "High Score: %d", high_score);
-    put_string(high_score_string, 1, 0);
 }
 
 main()
