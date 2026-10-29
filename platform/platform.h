@@ -19,5 +19,6 @@ void platform_reset(struct game_config *);
 void platform_copy_string(char *, char *);
 void platform_draw_credits_screen(bool);
 void platform_draw_tile(object, int, int);
+void platform_draw_scores(int score, int high_score);
 
 #endif

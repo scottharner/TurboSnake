@@ -55,10 +55,12 @@ static struct snake_node *allocate_snake_node(void)
 }
 
 // finds a random location to place the next apple
-static void generate_new_apple()
+static void generate_new_apple(bool draw_apple)
 {
 	int rand_y, rand_x;
-
+    int prev_apple_x, prev_apple_y;
+    prev_apple_x = apple_x;
+    prev_apple_y = apple_y;
     do{
 		rand_y = (int)(platform_get_random(config->map_height));
 		rand_x = (int)(platform_get_random(config->map_width));
@@ -66,6 +68,12 @@ static void generate_new_apple()
 	object_map[rand_y * config->map_width + rand_x] = OBJECT_APPLE;
     apple_x = rand_x;
     apple_y = rand_y;
+
+    // update apple on screen
+    if (draw_apple)
+    {
+        platform_draw_tile(OBJECT_APPLE, apple_x, apple_y);
+    }
 }
 
 static void set_object_map(int x, int y, object target_object)
@@ -77,6 +85,8 @@ static void set_object_map(int x, int y, object target_object)
     {
         needs_new_apple = true;
     }
+
+    platform_draw_tile(target_object, x, y);
 }
 
 /*
@@ -113,7 +123,7 @@ static void title_screen_read_input()
             if (!game_started)
                 platform_set_random_seed(frame_counter); // use frames to seed since some platforms dont have clock
 
-            generate_new_apple();
+            generate_new_apple(false);
         }
         else if (title_option == OPTION_CREDITS)
         {
@@ -302,6 +312,7 @@ static void move(input_type current_input)
     {
         score++;
         set_high_score();
+        platform_draw_scores(score, high_score);
 
         platform_play_sound(SOUND_PICKUP);
         temp = player;
@@ -343,7 +354,7 @@ static void move(input_type current_input)
 
     if (needs_new_apple)
     {
-        generate_new_apple(); // only generate after head is set since we are looking at object_map
+        generate_new_apple(true); // only generate after head is set since we are looking at object_map
         needs_new_apple = false;
     }
 }

@@ -34,7 +34,16 @@ general
 
 todo
 ----
-- general
+- turbografx
+	- sound effects
+	- potential out of memory errors after long snake?
+	- game over screen
+	- game win screen
+	- delete unused files
+	- take screenshots
+	- update documentation
+	- make a release
+	- post release somewhere?
 
 - enhancements (possible future todos)
 	- 2 player mode

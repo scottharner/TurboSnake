@@ -336,7 +336,7 @@ static void draw_border()
     put_tile(TILE_BORDER_TL, SCREEN_WIDTH-1, SCREEN_HEIGHT-1);
 }
 
-platform_draw_scores(int score, int high_score)
+void platform_draw_scores(int score, int high_score)
 {
     char score_string[15];
     char high_score_string[20];
@@ -361,25 +361,12 @@ void platform_draw_tile(object tile_object, int tile_x, int tile_y)
     put_tile(tile_id, tile_x+1, tile_y+2);
 }
 
-void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
+void draw_map(struct game_config *config, unsigned char *object_map)
 {
     int i,j;
-    unsigned char tile_id;
     int tile_index;
-    if (did_mode_change)
-    {        
-        cd_reset(); // stop game music
-        cd_playtrk(GAME_TRACKID, GAME_TRACKID+1, CDPLAY_REPEAT);
-        cls();
-        load_palette(0, game_palette, 1);
-        draw_border();
-        set_tile_data(game_tiles);
-        load_tile(0x1080); // 1000 + 80 for border so we dont overwrite
-        platform_draw_scores(score, high_score);
-    }
 
-    //O(N^2) runtime for this, 24^2 is pretty big.. so we may change this
-    //but for now, we draw every tile every frame!
+    //O(N^2) runtime for this, 24^2 is pretty big.. so we only do this at the very beginning of the game
     for (i = 0; i < config->map_height; i++)
     {
         for (j = 0; j < config->map_width; j++)
@@ -390,6 +377,22 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
             else
                 platform_draw_tile(object_map[tile_index], j, i);
         }
+    }
+}
+
+void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mode_change, struct game_config *config, int high_score)
+{
+    if (did_mode_change)
+    {        
+        cd_reset(); // stop game music
+        cd_playtrk(GAME_TRACKID, GAME_TRACKID+1, CDPLAY_REPEAT);
+        cls();
+        load_palette(0, game_palette, 1);
+        draw_border();
+        set_tile_data(game_tiles);
+        load_tile(0x1080); // 1000 + 80 for border so we dont overwrite
+        platform_draw_scores(score, high_score);
+        draw_map(config, object_map);
     }
 }
 
