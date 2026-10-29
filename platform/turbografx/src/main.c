@@ -113,11 +113,11 @@ static int get_centered_x_coord(char * text)
 void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type current_loss_type)
 {
     // todo - implement
-//     if (did_mode_change)
-//     {
-//         CDDA_Stop(); // stop game music
-//         jo_clear_screen();
-//     }
+    if (did_mode_change)
+    {
+        cd_reset(); // stop game music
+        cls();
+    }
 
 //     draw_tile(0, 40, game_over_sprite_id, BORDER_ZINDEX, 0);
 
@@ -197,7 +197,6 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
 
     game_get_speed_string(speed_string);
 
-    // draw_tile(0, 0, title_sprite_id, BORDER_ZINDEX, 0);
     set_font_pal(get_option_palette(title_option, OPTION_START));
     put_string("Start Game", get_centered_x_coord("Start Game"), 12);
     sprintf(speed_menu_string, "Speed: < %s >", speed_string);
@@ -254,15 +253,15 @@ input_type platform_get_input_type(mode game_mode, bool current_input_states[INP
         update_input_states(current_input_states, pad1_status);
         switch(game_mode)
         {
-    //         case MODE_GAME:
+            case MODE_GAME:
 
-    //             if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;
-    //             else if (jo_is_pad1_key_pressed(JO_KEY_LEFT)) current_input = INPUT_TYPE_LEFT;
-    //             else if (jo_is_pad1_key_pressed(JO_KEY_RIGHT)) current_input = INPUT_TYPE_RIGHT;
-    //             else if (jo_is_pad1_key_pressed(JO_KEY_DOWN)) current_input = INPUT_TYPE_DOWN;
-    //             else if (jo_is_pad1_key_pressed(JO_KEY_UP)) current_input = INPUT_TYPE_UP;
+                if (game_input_pressed(INPUT_TYPE_START)) current_input = INPUT_TYPE_START;
+                else if (pad1_status & JOY_LEFT) current_input = INPUT_TYPE_LEFT;
+                else if (pad1_status & JOY_RIGHT) current_input = INPUT_TYPE_RIGHT;
+                else if (pad1_status & JOY_DOWN) current_input = INPUT_TYPE_DOWN;
+                else if (pad1_status & JOY_UP) current_input = INPUT_TYPE_UP;
 
-    //             break;
+                break;
 
             default:
 
