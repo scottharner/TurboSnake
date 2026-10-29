@@ -7,10 +7,8 @@
 void platform_initialize();
 void platform_shutdown();
 input_type platform_get_input_type(mode game_mode, bool current_input_states[INPUT_TYPE_COUNT]);
-void * platform_memory_allocate(unsigned int);
-void platform_memory_free(void *);
 int platform_get_random(int);
-void platform_set_random_seed(unsigned int);
+void platform_set_random_seed(unsigned char);
 void platform_update_platform_state();
 void platform_draw_game_screen(unsigned char *, int, bool, struct game_config *, int);
 void platform_draw_game_over_screen(int, bool, loss_type);

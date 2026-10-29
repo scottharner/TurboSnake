@@ -212,31 +212,17 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
 }
 
 // platform specific setting of random generator seed
-void platform_set_random_seed(unsigned int seed)
+void platform_set_random_seed(unsigned char seed)
 {
-    // todo - implement
-    // jo_random_seed = seed;
+    srand(seed);
 }
 
 // platform specific random number generation
 int platform_get_random(int max)
 {
     if (max <= 0) return 0;
-    return max; // todo - implement
-    //return (jo_random(max)-1); // jo_random requires passing parm so we cant use modulo
+    return rand() % max;
 }
-
-// // platform specific memory allocation
-// void * platform_memory_allocate(unsigned int size)
-// {
-//     return jo_malloc(size);
-// }
-
-// // platform specific memory free
-// void platform_memory_free(void *pointer)
-// {
-//     jo_free(pointer);
-// }
 
 // steps to prepare to exit the game
 void platform_shutdown()

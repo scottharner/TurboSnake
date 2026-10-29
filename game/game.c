@@ -2,6 +2,7 @@
 #include "../../../game/game.h"
 #include "../../../platform/platform.h"
 #include <stdio.h>
+#include <limits.h>
 
 /*
 *   Snake: Platform agnostic game logic.
@@ -23,7 +24,7 @@ static int snake_nodes_used = 0;
 static mode game_mode;
 static mode previous_game_mode;
 static int action_cycles;
-static unsigned int frame_counter = 0;
+static unsigned char frame_counter = 0;
 static bool game_started = false;
 static loss_type current_loss_type = LOSS_TYPE_SELF;
 static int snake_length;
@@ -400,6 +401,9 @@ void game_update(void)
 
     action_cycles++;
     frame_counter++;
+    if (frame_counter == UCHAR_MAX)
+        frame_counter = 0;
+        
     did_mode_change = false;
     if (previous_game_mode != game_mode)
     {
