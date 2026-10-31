@@ -22,11 +22,6 @@
 #define YELLOW_PALETTE_INDEX 15
 #define TITLE_TRACKID 2
 #define GAME_TRACKID 3
-#define OVERLAY_INDEX 2
-#define PICKUP_SFX_OFFSET 0
-#define PICKUP_SFX_SECTORS 3
-#define PICKUP_SFX_BYTES 6144
-#define PICKUP_SFX_ADDRESS 0x0
 
 #incchr(title_tiles, "../assets/images/title.png")
 #incpal(title_palette, "../assets/images/title.png", 0, 1)
@@ -84,7 +79,8 @@ void platform_initialize()
 	load_default_font();
     
     // load sfx
-    ad_trans(OVERLAY_INDEX, PICKUP_SFX_OFFSET, PICKUP_SFX_SECTORS, PICKUP_SFX_ADDRESS);
+    ad_trans(2, 0x0000, 3, 0x0000); // pickup sound
+    ad_trans(3, 0x0000, 7, 0x1800); // lose sound
 
 //     game_over_sprite_id = jo_sprite_add_tga("TEX", "GAMEOVER.TGA", JO_COLOR_Transparent);
 //     you_win_sprite_id = jo_sprite_add_tga("TEX", "YOUWIN.TGA", JO_COLOR_Transparent);
@@ -99,12 +95,12 @@ void platform_play_sound(sound_type current_sound_type)
     // todo - implement
     if (current_sound_type == SOUND_PICKUP)
     {
-        ad_play(PICKUP_SFX_ADDRESS, PICKUP_SFX_BYTES, ADPLAY_FREQ_16KHZ, ADPLAY_AUTOSTOP);
+        ad_play(0x0000, 6144, ADPLAY_FREQ_16KHZ, ADPLAY_AUTOSTOP);
     }
-    // else if (current_sound_type == SOUND_LOSE)
-    // {
-    //     pcm_play(lose_sound_id, PCM_PROTECTED, 6);
-    // }
+    else if (current_sound_type == SOUND_LOSE)
+    {
+        ad_play(0x1800, 14336, ADPLAY_FREQ_16KHZ, ADPLAY_AUTOSTOP);
+    }
 }
 
 static int get_centered_x_coord(char * text)

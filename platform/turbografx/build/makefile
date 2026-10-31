@@ -13,4 +13,4 @@ game.ovl: $(SRC)
 	cmd /c copy ..\assets\bgm\game.wav game.wav
 
 game.iso: game.ovl
-	$(IL) $@ -ipl="TurboSnake" $^ ..\assets\sfx\pickup.vox
+	$(IL) $@ -ipl="TurboSnake" $^ ..\assets\sfx\pickup.vox ..\assets\sfx\lose.vox

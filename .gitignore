@@ -77,3 +77,4 @@ game.raw
 /platform/turbografx/src/*.sym
 /platform/turbografx/build/*.wav
 !/platform/turbografx/build/game.cue
+/platform/turbografx/build/*.ovl
