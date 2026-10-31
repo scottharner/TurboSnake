@@ -22,6 +22,11 @@
 #define YELLOW_PALETTE_INDEX 15
 #define TITLE_TRACKID 2
 #define GAME_TRACKID 3
+#define OVERLAY_INDEX 2
+#define PICKUP_SFX_OFFSET 0
+#define PICKUP_SFX_SECTORS 3
+#define PICKUP_SFX_BYTES 6144
+#define PICKUP_SFX_ADDRESS 0x0
 
 #incchr(title_tiles, "../assets/images/title.png")
 #incpal(title_palette, "../assets/images/title.png", 0, 1)
@@ -29,6 +34,9 @@
 #incchr(credits_tiles, "../assets/images/credits.png")
 #incpal(credits_palette, "../assets/images/credits.png", 0, 1)
 #incbat(credits_map, "../assets/images/credits.png", 0x1000, 32, 5)
+// #incchr(gameover_tiles, "../assets/images/gameover.png")
+// #incpal(gameover_palette, "../assets/images/gameover.png", 0, 1)
+// #incbat(gameover_map, "../assets/images/gameover.png", 0x1000, 32, 5)
 
 #incchr_ex(border_tiles,
     "../assets/tiles/bordertl.png", 0,0,1,1,0, \ 
@@ -74,6 +82,9 @@ void platform_initialize()
 	set_font_color(WHITE_COLOR_INDEX, BLACK_COLOR_INDEX);
 	set_font_pal(WHITE_PALETTE_INDEX);
 	load_default_font();
+    
+    // load sfx
+    ad_trans(OVERLAY_INDEX, PICKUP_SFX_OFFSET, PICKUP_SFX_SECTORS, PICKUP_SFX_ADDRESS);
 
 //     game_over_sprite_id = jo_sprite_add_tga("TEX", "GAMEOVER.TGA", JO_COLOR_Transparent);
 //     you_win_sprite_id = jo_sprite_add_tga("TEX", "YOUWIN.TGA", JO_COLOR_Transparent);
@@ -86,10 +97,10 @@ void platform_initialize()
 void platform_play_sound(sound_type current_sound_type)
 {
     // todo - implement
-    // if (current_sound_type == SOUND_PICKUP)
-    // {
-    //     pcm_play(pickup_sound_id, PCM_PROTECTED, 6);
-    // }
+    if (current_sound_type == SOUND_PICKUP)
+    {
+        ad_play(PICKUP_SFX_ADDRESS, PICKUP_SFX_BYTES, ADPLAY_FREQ_16KHZ, ADPLAY_AUTOSTOP);
+    }
     // else if (current_sound_type == SOUND_LOSE)
     // {
     //     pcm_play(lose_sound_id, PCM_PROTECTED, 6);
@@ -118,10 +129,11 @@ void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type c
     {
         cd_reset(); // stop game music
         cls();
+        // load_vram(0x1000, gameover_tiles, 0x0A00);
+        // load_palette(0, gameover_palette, 1);
+        // load_bat(0x0140, gameover_map, 32, 5);
     }
 
-//     draw_tile(0, 40, game_over_sprite_id, BORDER_ZINDEX, 0);
-    
     set_font_pal(WHITE_PALETTE_INDEX);
     sprintf(score_string, "Score: %d", score);
     put_string(score_string, get_centered_x_coord(score_string), 10);

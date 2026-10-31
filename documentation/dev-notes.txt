@@ -16,6 +16,8 @@ turbografx
 	- load_palette(0, title_palette, 1);
     - load_bat(0x0000, title_map, 32, 6);
 		- this is loading map data
+	- if you want it to load further down the screen (not 0,0), you have to increase the memory address
+		- ex 5 rows: 5 x 32 x 2 = 320 = 0x0140
 
 general
 -------
@@ -36,6 +38,8 @@ todo
 ----
 - turbografx
 	- sound effects
+		- play crash/lose
+		- add dev notes
 	- potential out of memory errors after long snake?
 	- game over screen
 	- game win screen
