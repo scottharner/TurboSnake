@@ -33,36 +33,48 @@
 // #incpal(gameover_palette, "../assets/images/gameover.png", 0, 1)
 // #incbat(gameover_map, "../assets/images/gameover.png", 0x1000, 32, 5)
 
-#incchr_ex(border_tiles,
-    "../assets/tiles/bordertl.png", 0,0,1,1,0, \ 
-    "../assets/tiles/bordertr.png", 0,0,1,1,0, \ 
-    "../assets/tiles/borderbl.png", 0,0,1,1,0, \ 
-    "../assets/tiles/borderbr.png", 0,0,1,1,0, \ 
-    "../assets/tiles/borderl.png", 0,0,1,1,0, \ 
-    "../assets/tiles/borderr.png", 0,0,1,1,0, \ 
-    "../assets/tiles/bordert.png", 0,0,1,1,0, \ 
-    "../assets/tiles/borderb.png", 0,0,1,1,0
-)
+#incchr(bordertl_tile, "../assets/tiles/bordertl.png")
+#incchr(bordertr_tile, "../assets/tiles/bordertr.png")
+#incchr(borderbl_tile, "../assets/tiles/borderbl.png")
+#incchr(borderbr_tile, "../assets/tiles/borderbr.png")
+#incchr(borderl_tile, "../assets/tiles/borderl.png")
+#incchr(borderr_tile, "../assets/tiles/borderr.png")
+#incchr(bordert_tile, "../assets/tiles/bordert.png")
+#incchr(borderb_tile, "../assets/tiles/borderb.png")
+
 #incpal(game_palette, "../assets/tiles/bordertl.png", 0, 1)
 
-#define TILE_BORDER_TL  0
-#define TILE_BORDER_TR  1
-#define TILE_BORDER_BL  2
-#define TILE_BORDER_BR  3
-#define TILE_BORDER_L   4
-#define TILE_BORDER_R   5
-#define TILE_BORDER_T   6
-#define TILE_BORDER_B   7
+#define TILE_BORDER_TL  0x100
+#define TILE_BORDER_TR  0x101
+#define TILE_BORDER_BL  0x102
+#define TILE_BORDER_BR  0x103
+#define TILE_BORDER_L   0x104
+#define TILE_BORDER_R   0x105
+#define TILE_BORDER_T   0x106
+#define TILE_BORDER_B   0x107
 
-#incchr_ex(game_tiles,
-    "../assets/tiles/apple.png", 0,0,1,1,0, \ 
-    "../assets/tiles/snake.png", 0,0,1,1,0, \ 
-    "../assets/tiles/empty.png", 0,0,1,1,0
-)
+#define TILE_BORDER_TL_ADDRESS 0x1000
+#define TILE_BORDER_TR_ADDRESS 0x1010
+#define TILE_BORDER_BL_ADDRESS 0x1020
+#define TILE_BORDER_BR_ADDRESS 0x1030
+#define TILE_BORDER_L_ADDRESS 0x1040
+#define TILE_BORDER_R_ADDRESS 0x1050
+#define TILE_BORDER_T_ADDRESS 0x1060
+#define TILE_BORDER_B_ADDRESS 0x1070
 
-#define TILE_APPLE  0
-#define TILE_SNAKE  1
-#define TILE_EMPTY  2
+#incchr(apple_tile, "../assets/tiles/apple.png")
+#incchr(snake_tile, "../assets/tiles/snake.png")
+#incchr(empty_tile, "../assets/tiles/empty.png")
+
+#define TILE_APPLE  0x108
+#define TILE_SNAKE  0x109
+#define TILE_EMPTY  0x10A
+
+#define TILE_APPLE_ADDRESS 0x1080
+#define TILE_SNAKE_ADDRESS 0x1090
+#define TILE_EMPTY_ADDRESS 0x10A0
+
+#define GAME_TILE_SIZE 0x0010
 
 // static int game_over_sprite_id;
 // static int you_win_sprite_id;
@@ -304,44 +316,76 @@ void platform_reset(struct game_config *config)
 static void draw_border()
 {
     int i;
-    set_tile_data(border_tiles);
-    load_tile(0x1000); // takes up 16 x 8 x 1 = 128 (0x0080)
+    load_vram(TILE_BORDER_TL_ADDRESS, bordertl_tile, GAME_TILE_SIZE);
+    load_vram(TILE_BORDER_TR_ADDRESS, bordertr_tile, GAME_TILE_SIZE);
+    load_vram(TILE_BORDER_BL_ADDRESS, borderbl_tile, GAME_TILE_SIZE);
+    load_vram(TILE_BORDER_BR_ADDRESS, borderbr_tile, GAME_TILE_SIZE);
+    load_vram(TILE_BORDER_L_ADDRESS, borderl_tile, GAME_TILE_SIZE);
+    load_vram(TILE_BORDER_R_ADDRESS, borderr_tile, GAME_TILE_SIZE);
+    load_vram(TILE_BORDER_T_ADDRESS, bordert_tile, GAME_TILE_SIZE);
+    load_vram(TILE_BORDER_B_ADDRESS, borderb_tile, GAME_TILE_SIZE);
+
+    //load_palette(0, palette, 1); - not needed?
 
     for (i = 1; i < SCREEN_WIDTH-1; i++)
     {
         // top
-        put_tile(TILE_BORDER_B, i, 1);
+        put_vram(
+            vram_addr(i, 1),
+            TILE_BORDER_B
+        );
     }
 
     for (i = 1; i < SCREEN_WIDTH-1; i++)
     {
         // bottom
-        put_tile(TILE_BORDER_T, i, SCREEN_HEIGHT-1);
+        put_vram(
+            vram_addr(i, SCREEN_HEIGHT-1),
+            TILE_BORDER_T
+        );
     }
 
     for (i = 1; i < SCREEN_HEIGHT-1; i++)
     {
         // left
-        put_tile(TILE_BORDER_R, 0, i);
+        put_vram(
+            vram_addr(0, i),
+            TILE_BORDER_R
+        );
     }
 
     for (i = 1; i < SCREEN_HEIGHT-1; i++)
     {
         // right
-        put_tile(TILE_BORDER_L, SCREEN_WIDTH-1, i);
+        put_vram(
+            vram_addr(SCREEN_WIDTH-1, i),
+            TILE_BORDER_L
+        );
     }
 
     // upper left
-    put_tile(TILE_BORDER_BR, 0, 1);
+    put_vram(
+        vram_addr(0, 1),
+        TILE_BORDER_BR
+    );
     
     // upper right
-    put_tile(TILE_BORDER_BL, SCREEN_WIDTH-1, 1);
+    put_vram(
+        vram_addr(SCREEN_WIDTH-1, 1),
+        TILE_BORDER_BL
+    );
 
     // lower left
-    put_tile(TILE_BORDER_TR, 0, SCREEN_HEIGHT-1);
+    put_vram(
+        vram_addr(0, SCREEN_HEIGHT-1),
+        TILE_BORDER_TR
+    );
 
     // lower right
-    put_tile(TILE_BORDER_TL, SCREEN_WIDTH-1, SCREEN_HEIGHT-1);
+    put_vram(
+        vram_addr(SCREEN_WIDTH-1, SCREEN_HEIGHT-1),
+        TILE_BORDER_TL
+    );
 }
 
 void platform_draw_scores(int score, int high_score)
@@ -359,14 +403,14 @@ void platform_draw_scores(int score, int high_score)
 
 void platform_draw_tile(object tile_object, int tile_x, int tile_y)
 {
-    unsigned char tile_id;
+    unsigned int tile_id;
     tile_id = TILE_EMPTY;
     if (tile_object == OBJECT_APPLE)
         tile_id = TILE_APPLE;
     else if (tile_object == OBJECT_SNAKE)
         tile_id = TILE_SNAKE;
     
-    put_tile(tile_id, tile_x+1, tile_y+2);
+    put_vram(vram_addr(tile_x+1, tile_y+2), tile_id);
 }
 
 void draw_map(struct game_config *config, unsigned char *object_map)
@@ -397,8 +441,9 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
         cls();
         load_palette(0, game_palette, 1);
         draw_border();
-        set_tile_data(game_tiles);
-        load_tile(0x1080); // 1000 + 80 for border so we dont overwrite
+        load_vram(TILE_APPLE_ADDRESS, apple_tile, GAME_TILE_SIZE);
+        load_vram(TILE_SNAKE_ADDRESS, snake_tile, GAME_TILE_SIZE);
+        load_vram(TILE_EMPTY_ADDRESS, empty_tile, GAME_TILE_SIZE);
         platform_draw_scores(score, high_score);
         draw_map(config, object_map);
     }
