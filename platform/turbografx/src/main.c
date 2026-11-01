@@ -29,7 +29,7 @@
 #incchr(credits_tiles, "../assets/images/credits.png")
 #incpal(credits_palette, "../assets/images/credits.png", 0, 1)
 #incbat(credits_map, "../assets/images/credits.png", 0x1000, 32, 5)
-// #incchr(gameover_tiles, "../assets/images/gameover.png")
+#incchr(gameover_tiles, "../assets/images/gameover.png")
 // #incpal(gameover_palette, "../assets/images/gameover.png", 0, 1)
 // #incbat(gameover_map, "../assets/images/gameover.png", 0x1000, 32, 5)
 
