@@ -39,8 +39,6 @@ todo
 - turbografx
 	- sound effects
 		- add dev notes
-	- game over screen
-	- game win screen
 	- delete unused files
 	- take screenshots
 	- update documentation
