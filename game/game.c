@@ -95,18 +95,32 @@ static void set_object_map(int x, int y, object target_object)
 */
 static struct snake_node* move_body(struct snake_node* current_node, int temp_x, int temp_y)
 {
-	if (current_node->next == NULL) //we've reached the end of the snake's body
-	{
-		set_object_map(current_node->x, current_node->y, OBJECT_NOTHING); //reset the object map at this position
-	}
-	else //we need to keep traversing
-	{
-		current_node->next = move_body(current_node->next,current_node->x,current_node->y);
-	}
-	current_node->x = temp_x;
-	current_node->y = temp_y;
-    return current_node;
+	struct snake_node* head;
+    int next_x;
+    int next_y;
 
+    head = current_node;
+
+    while (current_node != NULL)
+    {
+        next_x = current_node->x;
+        next_y = current_node->y;
+
+        if (current_node->next == NULL) //we've reached the end of the snake's body
+        {
+            set_object_map(current_node->x, current_node->y, OBJECT_NOTHING); //reset the object map at this position
+        }
+
+        current_node->x = temp_x;
+        current_node->y = temp_y;
+
+        temp_x = next_x;
+        temp_y = next_y;
+
+        current_node = current_node->next;
+    }
+
+    return head;
 }
 
 static void title_screen_read_input()

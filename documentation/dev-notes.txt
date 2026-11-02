@@ -39,8 +39,6 @@ todo
 - turbografx
 	- sound effects
 		- add dev notes
-		- example pull request
-	- potential out of memory errors after long snake?
 	- game over screen
 	- game win screen
 	- delete unused files
