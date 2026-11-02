@@ -28,10 +28,13 @@
 #incbat(title_map, "../assets/images/title.png", 0x1000, 32, 6)
 #incchr(credits_tiles, "../assets/images/credits.png")
 #incpal(credits_palette, "../assets/images/credits.png", 0, 1)
-#incbat(credits_map, "../assets/images/credits.png", 0x1000, 32, 5)
+#incbat(credits_map, "../assets/images/credits.png", 0x1000, 12, 5)
 #incchr(gameover_tiles, "../assets/images/gameover.png")
-// #incpal(gameover_palette, "../assets/images/gameover.png", 0, 1)
-// #incbat(gameover_map, "../assets/images/gameover.png", 0x1000, 32, 5)
+#incpal(gameover_palette, "../assets/images/gameover.png", 0, 1)
+#incbat(gameover_map, "../assets/images/gameover.png", 0x1000, 12, 5)
+#incchr(youwin_tiles, "../assets/images/youwin.png")
+#incpal(youwin_palette, "../assets/images/youwin.png", 0, 1)
+#incbat(youwin_map, "../assets/images/youwin.png", 0x1000, 12, 5)
 
 #incchr(bordertl_tile, "../assets/tiles/bordertl.png")
 #incchr(bordertr_tile, "../assets/tiles/bordertr.png")
@@ -137,9 +140,9 @@ void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type c
     {
         cd_reset(); // stop game music
         cls();
-        // load_vram(0x1000, gameover_tiles, 0x0A00);
-        // load_palette(0, gameover_palette, 1);
-        // load_bat(0x0140, gameover_map, 32, 5);
+        load_vram(0x1000, gameover_tiles, 0x03C0);
+        load_palette(0, gameover_palette, 1);
+        load_bat(0x014A, gameover_map, 12, 5); // start mid 6th row
     }
 
     set_font_pal(WHITE_PALETTE_INDEX);
@@ -152,18 +155,19 @@ void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type c
 // display a win screen
 void platform_draw_win_screen(int score, bool did_mode_change)
 {
-    // todo - implement
-//     if (did_mode_change)
-//     {
-//         CDDA_Stop(); // stop game music
-//         jo_clear_screen();
-//     }
+    char score_string[12];
+    if (did_mode_change)
+    {
+        cd_reset(); // stop game music
+        cls();
+        load_vram(0x1000, youwin_tiles, 0x03C0);
+        load_palette(0, youwin_palette, 1);
+        load_bat(0x014A, youwin_map, 12, 5); // start mid 6th row
+    }
 
-//     draw_tile(0, 40, you_win_sprite_id, BORDER_ZINDEX, 0);
-
-//     char score_string[12];
-//     sprintf(score_string, "Score: %d", score);
-//     print_centered_text(10, score_string, JO_COLOR_INDEX_White);
+    set_font_pal(WHITE_PALETTE_INDEX);
+    sprintf(score_string, "Score: %d", score);
+    put_string(score_string, get_centered_x_coord(score_string), 10);
 }
 
 // display a credits screen
@@ -173,9 +177,9 @@ void platform_draw_credits_screen(bool did_mode_change)
     {
         cd_reset(); // stop game music
         cls();
-        load_vram(0x1000, credits_tiles, 0x0A00);
+        load_vram(0x1000, credits_tiles, 0x03C0);
         load_palette(0, credits_palette, 1);
-        load_bat(0x0000, credits_map, 32, 5);
+        load_bat(0x000A, credits_map, 12, 5);
     }
 
     set_font_pal(WHITE_PALETTE_INDEX);
