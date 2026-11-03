@@ -188,7 +188,10 @@ void platform_draw_credits_screen(bool did_mode_change)
     put_string("QA Tester - Evan Harner", get_centered_x_coord("QA Tester - Evan Harner"), 11);
     put_string("Music - Safety Stoat Studios", get_centered_x_coord("Music - Safety Stoat Studios"), 13);
     put_string("Sound Effects - Kronbits", get_centered_x_coord("Sound Effects - Kronbits"), 15);
-    put_string("Advisor - Elmer", get_centered_x_coord("Advisor - Elmer"), 17);
+    put_string("Advisor - DarkKobold", get_centered_x_coord("Advisor - DarkKobold"), 17);
+    put_string("Advisor - Elmer", get_centered_x_coord("Advisor - Elmer"), 19);
+    put_string("Advisor - Kaminari", get_centered_x_coord("Advisor - Kaminari"), 21);
+    put_string("Advisor - turboxray", get_centered_x_coord("Advisor - turboxray"), 23);
     put_string("Powered By - HuCC", get_centered_x_coord("Powered By - HuCC"), 26);
 }
 

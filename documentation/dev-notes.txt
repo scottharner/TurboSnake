@@ -39,8 +39,6 @@ todo
 - turbografx
 	- sound effects
 		- add dev notes
-	- delete unused files
-	- take screenshots
 	- update documentation
 	- make a release
 	- post release somewhere?
