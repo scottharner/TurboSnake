@@ -18,6 +18,19 @@ turbografx
 		- this is loading map data
 	- if you want it to load further down the screen (not 0,0), you have to increase the memory address
 		- ex 5 rows: 5 x 32 x 2 = 320 = 0x0140
+- sound effects
+	- getting sfx running was tricky
+	- i have an example of this at https://github.com/scottharner/huc/tree/master/examples/hucc/cd-sfx
+	- had to modify original wav in audacity
+		- convert from stereo to mono
+		- set project to 16k
+		- add silence to end of file to the point where the total number of samples is a multiple of 4096
+			- you can change the indicators at the bottom of the screen from time to samples
+		- export and save the file
+	- run through wav2vox which comes packed with huc
+	- update the makefile to generate an overlay and include the vox file
+	- load the file with ad_trans (overlay index was 2!)
+	- play the file with ad_play
 
 general
 -------
@@ -37,9 +50,8 @@ general
 todo
 ----
 - turbografx
-	- sound effects
-		- add dev notes
-	- update documentation
+	- optimize tiles?
+	- replace remaining legacy calls
 	- make a release
 	- post release somewhere?
 
