@@ -5,7 +5,7 @@
 
 /*
 *   Snake: Turbografx implementation of snake using hucc framework.
-*   Last Update: Oct 27, 2026
+*   Last Update: Nov 3, 2026
 *   Author: Scott Harner
 */
 
@@ -79,12 +79,7 @@
 
 #define GAME_TILE_SIZE 0x0010
 
-// static int game_over_sprite_id;
-// static int you_win_sprite_id;
-// static short pickup_sound_id;
-// static short lose_sound_id;
-
-// Saturn implementation of platform initialization
+// Turbografx implementation of platform initialization
 void platform_initialize()
 {
     set_color_rgb(WHITE_COLOR_INDEX, 7, 7, 7);
@@ -96,18 +91,11 @@ void platform_initialize()
     // load sfx
     ad_trans(2, 0x0000, 3, 0x0000); // pickup sound
     ad_trans(3, 0x0000, 7, 0x1800); // lose sound
-
-//     game_over_sprite_id = jo_sprite_add_tga("TEX", "GAMEOVER.TGA", JO_COLOR_Transparent);
-//     you_win_sprite_id = jo_sprite_add_tga("TEX", "YOUWIN.TGA", JO_COLOR_Transparent);
-//     pickup_sound_id = load_8bit_pcm((Sint8 *)"PICKUP.PCM", 15360); // using ponetone due to issues with jo engine audio
-//     lose_sound_id = load_8bit_pcm((Sint8 *)"LOSE.PCM", 15360);
-//     CDDA_SetVolume(4);
 }
 
 // plays the requested sound effect
 void platform_play_sound(sound_type current_sound_type)
 {
-    // todo - implement
     if (current_sound_type == SOUND_PICKUP)
     {
         ad_play(0x0000, 6144, ADPLAY_FREQ_16KHZ, ADPLAY_AUTOSTOP);
@@ -328,7 +316,7 @@ input_type platform_get_input_type(mode game_mode, bool current_input_states[INP
         game_reset_input_states();
     }
 
-    return current_input; // todo - implement
+    return current_input;
 }
 
 void platform_update_platform_state()
@@ -353,8 +341,6 @@ static void draw_border()
     load_vram(TILE_BORDER_R_ADDRESS, borderr_tile, GAME_TILE_SIZE);
     load_vram(TILE_BORDER_T_ADDRESS, bordert_tile, GAME_TILE_SIZE);
     load_vram(TILE_BORDER_B_ADDRESS, borderb_tile, GAME_TILE_SIZE);
-
-    //load_palette(0, palette, 1); - not needed?
 
     for (i = 1; i < SCREEN_WIDTH-1; i++)
     {
