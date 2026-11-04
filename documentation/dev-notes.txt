@@ -31,6 +31,8 @@ turbografx
 	- update the makefile to generate an overlay and include the vox file
 	- load the file with ad_trans (overlay index was 2!)
 	- play the file with ad_play
+- the printf documentation is wrong in the function reference (i submitted a pull request to correct this)
+	- cursor positioning requires an escape sequence like \e7Y (not \eY7)
 
 general
 -------

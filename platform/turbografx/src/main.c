@@ -136,6 +136,7 @@ void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type c
 {
     char score_string[12];
     char reason_string[25];
+    char formatted_output_string[40];
     if (did_mode_change)
     {
         cd_reset(); // stop game music
@@ -147,15 +148,17 @@ void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type c
 
     set_font_pal(WHITE_PALETTE_INDEX);
     sprintf(score_string, "Score: %d", score);
-    put_string(score_string, get_centered_x_coord(score_string), 10);
+    sprintf(formatted_output_string, "\e%dX\e10Y%s", get_centered_x_coord(score_string), score_string);
+    printf(formatted_output_string);
     sprintf(reason_string, "Reason: %s", current_loss_type == LOSS_TYPE_SELF ? "Self Collision" : "Wall Collision");
-    put_string(reason_string, get_centered_x_coord(reason_string), 12);
+    sprintf(formatted_output_string, "\e%dX\e12Y%s", get_centered_x_coord(reason_string), reason_string);
 }
 
 // display a win screen
 void platform_draw_win_screen(int score, bool did_mode_change)
 {
     char score_string[12];
+    char formatted_score_string[20];
     if (did_mode_change)
     {
         cd_reset(); // stop game music
@@ -167,12 +170,14 @@ void platform_draw_win_screen(int score, bool did_mode_change)
 
     set_font_pal(WHITE_PALETTE_INDEX);
     sprintf(score_string, "Score: %d", score);
-    put_string(score_string, get_centered_x_coord(score_string), 10);
+    sprintf(formatted_score_string, "\e%dX\e10Y%s", get_centered_x_coord(score_string), score_string);
+    printf(formatted_score_string);
 }
 
 // display a credits screen
 void platform_draw_credits_screen(bool did_mode_change)
 {
+    char credit_string[50];
     if (did_mode_change)
     {
         cd_reset(); // stop game music
@@ -183,16 +188,26 @@ void platform_draw_credits_screen(bool did_mode_change)
     }
 
     set_font_pal(WHITE_PALETTE_INDEX);
-    put_string("Game Engineer - Stephen Bryant", get_centered_x_coord("Game Engineer - Stephen Bryant"), 7);
-    put_string("Port Engineer - Scott Harner", get_centered_x_coord("Port Engineer - Scott Harner"), 9);
-    put_string("QA Tester - Evan Harner", get_centered_x_coord("QA Tester - Evan Harner"), 11);
-    put_string("Music - Safety Stoat Studios", get_centered_x_coord("Music - Safety Stoat Studios"), 13);
-    put_string("Sound Effects - Kronbits", get_centered_x_coord("Sound Effects - Kronbits"), 15);
-    put_string("Advisor - DarkKobold", get_centered_x_coord("Advisor - DarkKobold"), 17);
-    put_string("Advisor - Elmer", get_centered_x_coord("Advisor - Elmer"), 19);
-    put_string("Advisor - Kaminari", get_centered_x_coord("Advisor - Kaminari"), 21);
-    put_string("Advisor - turboxray", get_centered_x_coord("Advisor - turboxray"), 23);
-    put_string("Powered By - HuCC", get_centered_x_coord("Powered By - HuCC"), 26);
+    sprintf(credit_string, "\e%dX\e7YGame Engineer - Stephen Bryant", get_centered_x_coord("Game Engineer - Stephen Bryant"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e9YPort Engineer - Scott Harner", get_centered_x_coord("Port Engineer - Scott Harner"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e11YQA Tester - Evan Harner", get_centered_x_coord("QA Tester - Evan Harner"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e13YMusic - Safety Stoat Studios", get_centered_x_coord("Music - Safety Stoat Studios"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e15YSound Effects - Kronbits", get_centered_x_coord("Sound Effects - Kronbits"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e17YAdvisor - DarkKobold", get_centered_x_coord("Advisor - DarkKobold"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e19YAdvisor - Elmer", get_centered_x_coord("Advisor - Elmer"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e21YAdvisor - Kaminari", get_centered_x_coord("Advisor - Kaminari"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e23YAdvisor - turboxray", get_centered_x_coord("Advisor - turboxray"));
+	printf(credit_string);
+    sprintf(credit_string, "\e%dX\e26YPowered By - HuCC", get_centered_x_coord("Powered By - HuCC"));
+	printf(credit_string);
 }
 
 // calculate the color to display for a menu option
@@ -213,6 +228,7 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
 {
     char speed_string[6];
     char speed_menu_string[20];
+    char title_line_string[40];
     if (did_mode_change)
     {
         cls();
@@ -225,16 +241,22 @@ void platform_draw_title_screen(bool did_mode_change, option title_option)
     game_get_speed_string(speed_string);
 
     set_font_pal(get_option_palette(title_option, OPTION_START));
-    put_string("Start Game", get_centered_x_coord("Start Game"), 12);
+    
+    sprintf(title_line_string, "\e%dX\e12YStart Game", get_centered_x_coord("Start Game"));
+    printf(title_line_string);
     sprintf(speed_menu_string, "Speed: < %s >", speed_string);
     set_font_pal(get_option_palette(title_option, OPTION_SPEED));
-    put_string(speed_menu_string, get_centered_x_coord(speed_menu_string), 14);
+    sprintf(title_line_string, "\e%dX\e14Y%s", get_centered_x_coord(speed_menu_string), speed_menu_string);
+    printf(title_line_string);
     set_font_pal(get_option_palette(title_option, OPTION_CREDITS));
-    put_string("Credits", get_centered_x_coord("Credits"), 16);
+    sprintf(title_line_string, "\e%dX\e16YCredits", get_centered_x_coord("Credits"));
+    printf(title_line_string);
 
     set_font_pal(WHITE_PALETTE_INDEX);
-    put_string("Game (C) 2010 Stephen Bryant", get_centered_x_coord("Game (C) 2010 Stephen Bryant"), 24);
-    put_string("Port (C) 2026 Scott Harner", get_centered_x_coord("Port (C) 2026 Scott Harner"), 26);
+    sprintf(title_line_string, "\e%dX\e24YGame (C) 2010 Stephen Bryant", get_centered_x_coord("Game (C) 2010 Stephen Bryant"));
+    printf(title_line_string);
+    sprintf(title_line_string, "\e%dX\e26YPort (C) 2026 Scott Harner", get_centered_x_coord("Port (C) 2026 Scott Harner"));
+    printf(title_line_string);
 }
 
 // platform specific setting of random generator seed
@@ -397,15 +419,15 @@ static void draw_border()
 
 void platform_draw_scores(int score, int high_score)
 {
-    char score_string[15];
-    char high_score_string[20];
+    char score_string[25];
+    char high_score_string[28];
 
     // draw the score
     set_font_pal(WHITE_PALETTE_INDEX);    
-    sprintf(score_string, "Score: %d", score);
-    put_string(score_string, SCREEN_WIDTH-12, 0);
-    sprintf(high_score_string, "High Score: %d", high_score);
-    put_string(high_score_string, 1, 0);
+    sprintf(score_string, "\e%dX\e0YScore: %d", SCREEN_WIDTH-12, score);
+    printf(score_string);
+    sprintf(high_score_string, "\e1X\e0YHigh Score: %d", high_score);
+    printf(high_score_string);
 }
 
 void platform_draw_tile(object tile_object, int tile_x, int tile_y)
