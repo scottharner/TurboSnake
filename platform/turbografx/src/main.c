@@ -140,6 +140,7 @@ void platform_draw_game_over_screen(int score, bool did_mode_change, loss_type c
     printf(formatted_output_string);
     sprintf(reason_string, "Reason: %s", current_loss_type == LOSS_TYPE_SELF ? "Self Collision" : "Wall Collision");
     sprintf(formatted_output_string, "\e%dX\e12Y%s", get_centered_x_coord(reason_string), reason_string);
+    printf(formatted_output_string);
 }
 
 // display a win screen
