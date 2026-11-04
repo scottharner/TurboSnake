@@ -23,18 +23,18 @@
 #define TITLE_TRACKID 2
 #define GAME_TRACKID 3
 
-#incchr(title_tiles, "../assets/images/title.png")
+#incchr(title_tiles, "../assets/images/title.png", 0, 0, 32, 6, _OPTIMIZE)
 #incpal(title_palette, "../assets/images/title.png", 0, 1)
-#incbat(title_map, "../assets/images/title.png", 0x1000, 32, 6)
-#incchr(credits_tiles, "../assets/images/credits.png")
+#incbat(title_map, "../assets/images/title.png", 0x1000, 32, 6, title_tiles)
+#incchr(credits_tiles, "../assets/images/credits.png", 0, 0, 12, 5, _OPTIMIZE)
 #incpal(credits_palette, "../assets/images/credits.png", 0, 1)
-#incbat(credits_map, "../assets/images/credits.png", 0x1000, 12, 5)
-#incchr(gameover_tiles, "../assets/images/gameover.png")
+#incbat(credits_map, "../assets/images/credits.png", 0x1000, 12, 5, credits_tiles)
+#incchr(gameover_tiles, "../assets/images/gameover.png", 0, 0, 12, 5, _OPTIMIZE)
 #incpal(gameover_palette, "../assets/images/gameover.png", 0, 1)
-#incbat(gameover_map, "../assets/images/gameover.png", 0x1000, 12, 5)
-#incchr(youwin_tiles, "../assets/images/youwin.png")
+#incbat(gameover_map, "../assets/images/gameover.png", 0x1000, 12, 5, gameover_tiles)
+#incchr(youwin_tiles, "../assets/images/youwin.png", 0, 0, 12, 5, _OPTIMIZE)
 #incpal(youwin_palette, "../assets/images/youwin.png", 0, 1)
-#incbat(youwin_map, "../assets/images/youwin.png", 0x1000, 12, 5)
+#incbat(youwin_map, "../assets/images/youwin.png", 0x1000, 12, 5, youwin_tiles)
 
 #incchr(bordertl_tile, "../assets/tiles/bordertl.png")
 #incchr(bordertr_tile, "../assets/tiles/bordertr.png")
@@ -442,7 +442,7 @@ void platform_draw_tile(object tile_object, int tile_x, int tile_y)
     put_vram(vram_addr(tile_x+1, tile_y+2), tile_id);
 }
 
-void draw_map(struct game_config *config, unsigned char *object_map)
+void draw_game_map(struct game_config *config, unsigned char *object_map)
 {
     int i,j;
     int tile_index;
@@ -474,7 +474,7 @@ void platform_draw_game_screen(unsigned char *object_map, int score, bool did_mo
         load_vram(TILE_SNAKE_ADDRESS, snake_tile, GAME_TILE_SIZE);
         load_vram(TILE_EMPTY_ADDRESS, empty_tile, GAME_TILE_SIZE);
         platform_draw_scores(score, high_score);
-        draw_map(config, object_map);
+        draw_game_map(config, object_map);
     }
 }
 
