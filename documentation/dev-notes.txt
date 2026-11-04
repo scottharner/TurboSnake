@@ -51,12 +51,6 @@ general
 
 todo
 ----
-- turbografx
-	- optimize tiles?
-	- replace remaining legacy calls
-	- make a release
-	- post release somewhere?
-
 - enhancements (possible future todos)
 	- 2 player mode
 	- save high score to backup memory
