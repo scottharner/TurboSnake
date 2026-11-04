@@ -1,7 +1,7 @@
 Snake Turbografx Console Port
 =============================
 By Scott Harner
-October 21, 2026
+November 4, 2026
 
 > **Note:** This is a fork of [rondorkerin/Snake](https://github.com/rondorkerin/Snake). 
 > - Added Turbografx platform support (Turbo Snake).
